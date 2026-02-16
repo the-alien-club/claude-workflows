@@ -7,7 +7,7 @@
 
 ## 🎯 What's Included
 
-This plugin provides **21 slash commands** and **8 custom agents** to streamline your development workflow:
+This plugin provides **16 slash commands** and **8 custom agents** to streamline your development workflow:
 
 ### 📋 Planning & Research
 - `/create_plan` - Interactive implementation planning
@@ -23,8 +23,6 @@ This plugin provides **21 slash commands** and **8 custom agents** to streamline
 - `/commit` - Create conventional commits without Claude attribution
 - `/merge_request` - Generate comprehensive GitLab MR descriptions
 - `/describe_pr` - Create PR descriptions
-- `/ci_commit` - CI-friendly commit creation
-- `/ci_describe_pr` - CI-friendly PR descriptions
 
 ### 🎯 Specialized Workflows
 - `/oneshot` - Research and plan in one command
@@ -33,11 +31,9 @@ This plugin provides **21 slash commands** and **8 custom agents** to streamline
 ### 📚 Documentation & Handoffs
 - `/create_handoff` - Create handoff documents for session transfer
 - `/resume_handoff` - Resume work from handoff documentation
-- `/linear` - Manage Linear tickets
-- `/founder_mode` - Experimental feature development
+- `/weekly_summary` - Generate weekly repository summaries
 
 ### 🔧 DevOps & Utilities
-- `/create_worktree` - Git worktree management
 - `/local_review` - Set up branch review environment
 - `/batch_mr_dev_to_staging` - Batch merge request creation
 
