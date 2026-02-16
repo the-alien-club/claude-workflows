@@ -1,20 +1,18 @@
 # Alien Intelligence Workflows
 
-**Production-ready development workflows for Claude Code** - Planning, research, implementation, commits, merge requests, and Notion integration for full-stack AI-powered development.
+**Production-ready development workflows for Claude Code** - Planning, research, implementation, commits, and merge requests for full-stack AI-powered development.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/the-alien-club/claude-workflows)
 
 ## 🎯 What's Included
 
-This plugin provides **30 slash commands** and **8 custom agents** to streamline your development workflow:
+This plugin provides **21 slash commands** and **8 custom agents** to streamline your development workflow:
 
 ### 📋 Planning & Research
-- `/create_plan_nt` - Create implementation plans with Notion integration
 - `/create_plan` - Interactive implementation planning
-- `/research_codebase_nt` - Research codebase with Notion documentation
 - `/research_codebase` - Codebase analysis and exploration
-- `/iterate_plan_nt` - Iterate on existing plans with Notion sync
+- `/iterate_plan` - Iterate on existing implementation plans
 
 ### 🛠️ Implementation
 - `/implement_plan` - Execute implementation plans with verification
@@ -24,13 +22,11 @@ This plugin provides **30 slash commands** and **8 custom agents** to streamline
 ### 🔄 Git Workflows
 - `/commit` - Create conventional commits without Claude attribution
 - `/merge_request` - Generate comprehensive GitLab MR descriptions
-- `/describe_pr_nt` - Create PR descriptions with Notion linking
+- `/describe_pr` - Create PR descriptions
 - `/ci_commit` - CI-friendly commit creation
+- `/ci_describe_pr` - CI-friendly PR descriptions
 
 ### 🎯 Specialized Workflows
-- `/ralph_plan` - Ralph's planning workflow
-- `/ralph_impl` - Ralph's implementation workflow
-- `/ralph_research` - Ralph's research workflow
 - `/oneshot` - Research and plan in one command
 - `/oneshot_plan` - Execute full feature workflow
 
@@ -85,7 +81,7 @@ After installation, all commands are available with the plugin namespace:
 /alien-intelligence-workflows:commit
 
 # Create an implementation plan
-/alien-intelligence-workflows:create_plan_nt
+/alien-intelligence-workflows:create_plan
 
 # Generate a merge request
 /alien-intelligence-workflows:merge_request
@@ -97,19 +93,18 @@ Run `/help` to see all available commands.
 
 ### Planning Commands
 
-#### `/create_plan_nt`
-Creates detailed implementation plans through interactive research with Notion integration.
+#### `/create_plan`
+Creates detailed implementation plans through interactive research.
 
 **Features:**
 - Spawns parallel research agents
 - Interactive planning workflow
-- Notion task creation
 - Automated/manual success criteria separation
 - Phase-based implementation structure
 
 **Usage:**
 ```bash
-/alien-intelligence-workflows:create_plan_nt Add user authentication
+/alien-intelligence-workflows:create_plan Add user authentication
 ```
 
 #### `/implement_plan`
@@ -150,10 +145,8 @@ Creates comprehensive GitLab merge requests by analyzing feature branches.
 **Features:**
 - Analyzes all commits and changes
 - Generates structured MR description
-- Links Notion tasks automatically
 - Includes deployment and security notes
 - Creates MR via `glab` CLI
-- Optionally updates Notion task status
 
 **Usage:**
 ```bash
@@ -212,12 +205,6 @@ The following tools should be installed:
 - `git` - Version control
 - `glab` - GitLab CLI (for merge requests)
 - Node.js / Python / Go (depending on your stack)
-
-### Notion Integration
-
-Some commands integrate with Notion MCP:
-- Requires Notion MCP server configured
-- Used by: `create_plan_nt`, `research_codebase_nt`, `iterate_plan_nt`, `merge_request`
 
 ### Environment Variables
 
