@@ -7,37 +7,45 @@
 
 ## 🎯 What's Included
 
-This plugin provides **16 slash commands** and **8 custom agents** to streamline your development workflow:
+This plugin provides **17 slash commands** and **8 custom agents** to streamline your development workflow:
 
 ### 📋 Planning & Research
+
 - `/create_plan` - Interactive implementation planning
 - `/research_codebase` - Codebase analysis and exploration
 - `/iterate_plan` - Iterate on existing implementation plans
 
 ### 🛠️ Implementation
+
 - `/implement_plan` - Execute implementation plans with verification
 - `/validate_plan` - Validate implementation against plan criteria
 - `/debug` - Debug issues with comprehensive analysis
 
 ### 🔄 Git Workflows
+
 - `/commit` - Create conventional commits without Claude attribution
 - `/merge_request` - Generate comprehensive GitLab MR descriptions
 - `/describe_pr` - Create PR descriptions
 
 ### 🎯 Specialized Workflows
+
 - `/oneshot` - Research and plan in one command
 - `/oneshot_plan` - Execute full feature workflow
 
 ### 📚 Documentation & Handoffs
+
 - `/create_handoff` - Create handoff documents for session transfer
 - `/resume_handoff` - Resume work from handoff documentation
 - `/weekly_summary` - Generate weekly repository summaries
+- `/format_comments` - Format comments in the codebase
 
 ### 🔧 DevOps & Utilities
+
 - `/local_review` - Set up branch review environment
 - `/batch_mr_dev_to_staging` - Batch merge request creation
 
 ### 🤖 Custom Agents
+
 - **project-tracker** - Track project progress and next steps
 - **codebase-locator** - Find relevant code quickly
 - **codebase-analyzer** - Deep codebase analysis
@@ -90,6 +98,7 @@ Run `/help` to see all available commands.
 ### Planning Commands
 
 #### `/create_plan`
+
 Creates detailed implementation plans through interactive research.
 
 **Features:**
@@ -104,6 +113,7 @@ Creates detailed implementation plans through interactive research.
 ```
 
 #### `/implement_plan`
+
 Executes approved implementation plans with continuous verification.
 
 **Features:**
@@ -121,6 +131,7 @@ Executes approved implementation plans with continuous verification.
 ### Git Commands
 
 #### `/commit`
+
 Creates conventional commits without Claude attribution.
 
 **Features:**
@@ -136,6 +147,7 @@ Creates conventional commits without Claude attribution.
 ```
 
 #### `/merge_request`
+
 Creates comprehensive GitLab merge requests by analyzing feature branches.
 
 **Features:**
