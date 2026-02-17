@@ -19,7 +19,8 @@ for them to follow the original style (before-AI).
 3. **Break long lines naturally** - Split descriptions across multiple lines where it reads well
 4. **Use "Note:" for single notes** - Capitalize "Note:" as it starts a new sentence
 5. **Use "Notes:" for multiple notes** - Keep it plural when there are multiple points
-6. **Always end with a period** - Multi-line comments (/** */) should end with proper punctuation
+6. **Always end with a period** - Multi-line comments (/** */) should end with proper punctuation,
+   But single-line comments (//) should not have end punctuation.
 7. **No emojis** - Never use emojis in comments (exception: UI components displaying emojis)
 
 ### Examples
