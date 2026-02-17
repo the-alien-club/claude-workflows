@@ -3,13 +3,9 @@
     "description": "Alien Intelligence platform development workflows: planning, research, implementation, commits, merge requests, and Notion integration for full-stack AI-powered development",
     "version": "1.0.0",
     "author": {
-        "name": "Alien Intelligence",
-        "url": "https://alien.club"
+        "name": "Alien Intelligence"
     },
     "homepage": "https://github.com/the-alien-club/claude-workflows",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/the-alien-club/claude-workflows.git"
-    },
+    "repository": "https://github.com/the-alien-club/claude-workflows",
     "license": "MIT"
 }
