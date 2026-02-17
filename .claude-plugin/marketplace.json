@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "alien-intelligence-workflows",
-      "source": ".",
+      "source": "./",
       "description": "Alien Intelligence platform development workflows: planning, research, implementation, commits, merge requests, and Notion integration for full-stack AI-powered development",
       "version": "1.0.0",
       "author": {
