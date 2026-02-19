@@ -10,6 +10,9 @@ This document defines the natural comment style used throughout the codebase,
 its goal is not really to modify the content of the comments but to reformat them in order
 for them to follow the original style (before-AI).
 
+**IMPORTANT**: You should first use the Git history (last 16 commits for example) of this repository
+in order to only change the latest files and not have to go through the entire codebase.
+
 ## JSDoc Comments
 
 ### Principles
@@ -19,8 +22,7 @@ for them to follow the original style (before-AI).
 3. **Break long lines naturally** - Split descriptions across multiple lines where it reads well
 4. **Use "Note:" for single notes** - Capitalize "Note:" as it starts a new sentence
 5. **Use "Notes:" for multiple notes** - Keep it plural when there are multiple points
-6. **Always end with a period** - Multi-line comments (/** */) should end with proper punctuation,
-   But single-line comments (//) should not have end punctuation.
+6. **Always end with a period** - Multi-line comments (/** */) should end with proper punctuation
 7. **No emojis** - Never use emojis in comments (exception: UI components displaying emojis)
 
 ### Examples
@@ -376,3 +378,26 @@ return <Button>Save Changes [disk icon]</Button>
 - `// Check if license exists.` -> `// Check if license exists`
 - `/** Get user */` -> `/** Get user. */`
 - `// [emoji] Launch process` -> `// Launch process`
+
+
+## Functions JSDoc
+
+- **Always end with a period.**
+- **Use the correct tense.**
+- **Use descriptive comments.**
+- Optional parameters should always have a doc that ends with this: ` (optional, defaults to `<type>`).`
+
+```typescript
+/**
+ * Verify a token code against its hash (constant-time comparison).
+ * @param code The secret code to verify.
+ * @param tokenHash The stored hash to compare against.
+ * @returns True if the code matches the hash, false otherwise.
+ */
+export async function verifyTokenCode(code: string, tokenHash: string): Promise<boolean>
+```
+
+## AI Slop
+
+- Try to remove `Step X` from the comments, as they can become outdated or irrelevant.
+- Remove any `---- comment ----` lines.
