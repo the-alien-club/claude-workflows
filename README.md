@@ -7,7 +7,7 @@
 
 ## 🎯 What's Included
 
-This plugin provides **17 slash commands** and **8 custom agents** to streamline your development workflow:
+This plugin provides **18 slash commands** and **8 custom agents** to streamline your development workflow:
 
 ### 📋 Planning & Research
 
@@ -24,6 +24,7 @@ This plugin provides **17 slash commands** and **8 custom agents** to streamline
 ### 🔄 Git Workflows
 
 - `/commit` - Create conventional commits without Claude attribution
+- `/commit_msg` - Create conventional commit messages based on the git diff
 - `/merge_request` - Generate comprehensive GitLab MR descriptions
 - `/describe_pr` - Create PR descriptions
 
