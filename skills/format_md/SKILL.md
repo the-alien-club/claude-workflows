@@ -223,16 +223,16 @@ Use `**bold**` for:
 Do not bold entire sentences or arbitrary emphasis.
 
 ## 11. Blank Lines — Full Rules Summary
-| Situation                                            | Blank line? |
-|------------------------------------------------------|-------------|
-| Between `#` title and metadata / description         | No          |
-| Between `##` / `###` heading and first body line     | No          |
-| Between `####` heading and `- **File**:` bullet      | No          |
-| Between `- **Scope**:` bullet and description prose  | Yes (one)   |
-| Between prose ending with `:` and a table            | No          |
-| Between two consecutive `####` sections              | Yes (one)   |
-| Between `##` sections                                | Yes (one)   |
-| Between list items (bullet or numbered)              | No          |
+| Situation                                            | Blank line?                            |
+|------------------------------------------------------|----------------------------------------|
+| Between `#` title and metadata / description         | No                                     |
+| Between `##` / `###` heading and first body line     | No                                     |
+| Between `####` heading and `- **File**:` bullet      | No                                     |
+| Between `- **Scope**:` bullet and description prose  | Yes (one)                              |
+| Between prose ending with `:` and a table            | No                                     |
+| Between two consecutive `####` sections              | Yes (one)                              |
+| Between `##` sections                                | Yes (one)                              |
+| Between list items (bullet or numbered)              | No                                     |
 | At the end of the file                               | Single trailing newline, no blank line |
 
 ## 12. Lists
