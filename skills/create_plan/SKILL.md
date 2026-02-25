@@ -4,11 +4,9 @@ model: opus
 ---
 
 # Implementation Plan
-
 You are tasked with creating detailed implementation plans through an interactive, iterative process. You should be skeptical, thorough, and work collaboratively with the user to produce high-quality technical specifications.
 
 ## Initial Response
-
 When this command is invoked:
 
 1. **Check if parameters were provided**:
@@ -17,7 +15,7 @@ When this command is invoked:
    - Begin the research process
 
 2. **If no parameters provided**, respond with:
-```
+```text
 I'll help you create a detailed implementation plan. Let me start by understanding what we're building.
 
 Please provide:
@@ -36,7 +34,6 @@ Then wait for the user's input.
 ## Process Steps
 
 ### Step 1: Context Gathering & Initial Analysis
-
 1. **Read all mentioned files immediately and FULLY**:
    - Research documents in ai_docs/
    - Related implementation plans
@@ -44,7 +41,6 @@ Then wait for the user's input.
    - **IMPORTANT**: Use the Read tool WITHOUT limit/offset parameters to read entire files
    - **CRITICAL**: DO NOT spawn sub-tasks before reading these files yourself in the main context
    - **NEVER** read files partially - if a file is mentioned, read it completely
-
 2. **Spawn initial research tasks to gather context**:
    Before asking the user any questions, use specialized agents to research in parallel:
 
@@ -71,7 +67,7 @@ Then wait for the user's input.
    - Determine true scope based on codebase reality
 
 5. **Present informed understanding and focused questions**:
-   ```
+   ```text
    Based on the ticket and my research of the codebase, I understand we need to [accurate summary].
 
    I've found that:
@@ -88,7 +84,6 @@ Then wait for the user's input.
    Only ask questions that you genuinely cannot answer through code investigation.
 
 ### Step 2: Research & Discovery
-
 After getting initial clarifications:
 
 1. **If the user corrects any misunderstanding**:
@@ -104,17 +99,17 @@ After getting initial clarifications:
    - Use the right agent for each type of research:
 
    **For deeper investigation:**
-   - **codebase-locator** - To find more specific files (e.g., "find all files that handle [specific component]")
-   - **codebase-analyzer** - To understand implementation details (e.g., "analyze how [system] works")
-   - **codebase-pattern-finder** - To find similar features we can model after
+   - **codebase-locator**: To find more specific files (e.g., "find all files that handle [specific component]")
+   - **codebase-analyzer**: To understand implementation details (e.g., "analyze how [system] works")
+   - **codebase-pattern-finder**: To find similar features we can model after
 
    **For historical context and patterns:**
-   - **mcp__notion__notion-search** - To find Knowledge Base articles about architecture patterns
-   - **mcp__notion__notion-fetch** - To read specific Knowledge Base documents
-   - **mcp__notion__notion-search** - To find similar past Features & Tasks
+   - **mcp__notion__notion-search**: To find Knowledge Base articles about architecture patterns
+   - **mcp__notion__notion-fetch**: To read specific Knowledge Base documents
+   - **mcp__notion__notion-search**: To find similar past Features & Tasks
 
    **For related tickets:**
-   - **linear-searcher** - To find similar issues or past implementations
+   - **linear-searcher**: To find similar issues or past implementations
 
    Each agent knows how to:
    - Find the right files and code patterns
@@ -123,10 +118,10 @@ After getting initial clarifications:
    - Return specific file:line references
    - Find tests and examples
 
-3. **Wait for ALL sub-tasks to complete** before proceeding
+4. **Wait for ALL sub-tasks to complete** before proceeding
 
-4. **Present findings and design options**:
-   ```
+5. **Present findings and design options**:
+   ```text
    Based on my research, here's what I found:
 
    **Current State:**
@@ -145,11 +140,10 @@ After getting initial clarifications:
    ```
 
 ### Step 3: Plan Structure Development
-
 Once aligned on approach:
 
 1. **Create initial plan outline**:
-   ```
+   ```text
    Here's my proposed plan structure:
 
    ## Overview
@@ -166,13 +160,12 @@ Once aligned on approach:
 2. **Get feedback on structure** before writing details
 
 ### Step 4: Detailed Plan Writing
-
 After structure approval:
 
 1. **Create Notion task** in Features & Tasks database (if not already exists):
    - Task Name: Clear, actionable title
    - Type: Feature/Bug/Refactor/Infrastructure
-   - Status: 🎯 Ready (when plan complete)
+   - Status: Ready (when plan complete)
    - Component: Relevant repositories
    - Estimated Effort: Based on complexity
 
@@ -187,7 +180,8 @@ After structure approval:
    - Add file path in task content or comments
    - Notion task provides overview and tracking
    - Local file is source of truth for implementation details
-2. **Use this template structure**:
+
+4. **Use this template structure**:
 
 ````markdown
 # [Feature/Task Name] Implementation Plan
@@ -288,7 +282,6 @@ After structure approval:
 ````
 
 ### Step 5: Finalize and Track
-
 1. **Create feature branch** (if not already on one):
    ```bash
    git checkout -b feature/[feature-name]
@@ -298,7 +291,7 @@ After structure approval:
    - Inform user: "I recommend creating feature branch: `feature/[feature-name]`"
 
 2. **Update Notion task**:
-   - Set task status to 🎯 Ready
+   - Set task status to Ready
    - Add plan file path to task content/comments
    - Add feature branch name to task comments
    - Link any relevant Knowledge Base articles
@@ -306,13 +299,13 @@ After structure approval:
    - Local ai_docs/ file = source of truth
 
 3. **Present the draft plan location**:
-   ```
+   ```text
    I've created the implementation plan at:
    `ai_docs/[feature-name]/plan/implementation-plan.md`
 
    Notion task: [URL if created]
 
-   📌 Recommended next step: Create feature branch
+   Recommended next step: Create feature branch
    git checkout -b feature/[feature-name]
 
    Please review the plan and let me know:
@@ -331,40 +324,34 @@ After structure approval:
    - Add/remove scope items
    - Update Notion task if scope changes significantly
 
-4. **Continue refining** until the user is satisfied
+5. **Continue refining** until the user is satisfied
 
 ## Important Guidelines
-
 1. **Be Skeptical**:
    - Question vague requirements
    - Identify potential issues early
    - Ask "why" and "what about"
    - Don't assume - verify with code
-
 2. **Be Interactive**:
    - Don't write the full plan in one shot
    - Get buy-in at each major step
    - Allow course corrections
    - Work collaboratively
-
 3. **Be Thorough**:
    - Read all context files COMPLETELY before planning
    - Research actual code patterns using parallel sub-tasks
    - Include specific file paths and line numbers
    - Write measurable success criteria with clear automated vs manual distinction
    - automated steps should use `make` whenever possible - for example `make -C humanlayer-wui check` instead of `cd humanlayer-wui && bun run fmt`
-
 4. **Be Practical**:
    - Focus on incremental, testable changes
    - Consider migration and rollback
    - Think about edge cases
    - Include "what we're NOT doing"
-
 5. **Track Progress**:
    - Use TodoWrite to track planning tasks
    - Update todos as you complete research
    - Mark planning tasks complete when done
-
 6. **No Open Questions in Final Plan**:
    - If you encounter open questions during planning, STOP
    - Research or ask for clarification immediately
@@ -373,7 +360,6 @@ After structure approval:
    - Every decision must be made before finalizing the plan
 
 ## Success Criteria Guidelines
-
 **Always separate success criteria into two categories:**
 
 1. **Automated Verification** (can be run by execution agents):
@@ -428,7 +414,6 @@ After structure approval:
 - Include migration strategy
 
 ## Sub-task Spawning Best Practices
-
 When spawning research sub-tasks:
 
 1. **Spawn multiple tasks in parallel** for efficiency
@@ -463,8 +448,7 @@ tasks = [
 ```
 
 ## Example Interaction Flow
-
-```
+```text
 User: /create_plan
 Assistant: I'll help you create a detailed implementation plan...
 

@@ -3,13 +3,11 @@ description: Debug issues by investigating logs, database state, and git history
 ---
 
 # Debug
-
 You are tasked with helping debug issues during manual testing or implementation. This command allows you to investigate problems by examining logs, database state, and git history without editing files. Think of this as a way to bootstrap a debugging session without using the primary window's context.
 
 ## Initial Response
-
 When invoked WITH a plan/ticket file:
-```
+```text
 I'll help debug issues with [file name]. Let me understand the current state.
 
 What specific problem are you encountering?
@@ -21,7 +19,7 @@ I'll investigate the logs, database, and git state to help figure out what's hap
 ```
 
 When invoked WITHOUT parameters:
-```
+```text
 I'll help debug your current issue.
 
 Please describe what's going wrong:
@@ -33,7 +31,6 @@ I can investigate logs, database state, and recent changes to help identify the 
 ```
 
 ## Environment Information
-
 You have access to these key locations and tools:
 
 **Logs** (automatically created by `make daemon` and `make wui`):
@@ -58,24 +55,21 @@ You have access to these key locations and tools:
 ## Process Steps
 
 ### Step 1: Understand the Problem
-
 After the user describes the issue:
 
 1. **Read any provided context** (plan or ticket file):
    - Understand what they're implementing/testing
    - Note which phase or step they're on
    - Identify expected vs actual behavior
-
 2. **Quick state check**:
    - Current git branch and recent commits
    - Any uncommitted changes
    - When the issue started occurring
 
 ### Step 2: Investigate the Issue
-
 Spawn parallel Task agents for efficient investigation:
 
-```
+```text
 Task 1 - Check Recent Logs:
 Find and analyze the most recent logs for errors:
 1. Find latest daemon log: ls -t ~/.humanlayer/logs/daemon-*.log | head -1
@@ -86,7 +80,7 @@ Find and analyze the most recent logs for errors:
 Return: Key errors/warnings with timestamps
 ```
 
-```
+```text
 Task 2 - Database State:
 Check the current database state:
 1. Connect to database: sqlite3 ~/.humanlayer/daemon.db
@@ -99,7 +93,7 @@ Check the current database state:
 Return: Relevant database findings
 ```
 
-```
+```text
 Task 3 - Git and File State:
 Understand what changed recently:
 1. Check git status and current branch
@@ -111,7 +105,6 @@ Return: Git state and any file issues
 ```
 
 ### Step 3: Present Findings
-
 Based on the investigation, present a focused debug report:
 
 ```markdown
@@ -161,16 +154,14 @@ Would you like me to investigate something specific further?
 ```
 
 ## Important Notes
-
-- **Focus on manual testing scenarios** - This is for debugging during implementation
-- **Always require problem description** - Can't debug without knowing what's wrong
-- **Read files completely** - No limit/offset when reading context
-- **Think like `commit` or `describe_pr`** - Understand git state and changes
-- **Guide back to user** - Some issues (browser console, MCP internals) are outside reach
-- **No file editing** - Pure investigation only
+- **Focus on manual testing scenarios**: This is for debugging during implementation
+- **Always require problem description**: Can't debug without knowing what's wrong
+- **Read files completely**: No limit/offset when reading context
+- **Think like `commit` or `describe_pr`**: Understand git state and changes
+- **Guide back to user**: Some issues (browser console, MCP internals) are outside reach
+- **No file editing**: Pure investigation only
 
 ## Quick Reference
-
 **Find Latest Logs**:
 ```bash
 ls -t ~/.humanlayer/logs/daemon-*.log | head -1

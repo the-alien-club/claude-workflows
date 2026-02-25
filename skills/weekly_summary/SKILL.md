@@ -7,7 +7,6 @@ allowed-tools: Bash, Read, Write, Task
 ---
 
 # Weekly Summary - AI-Powered Multi-Repo Analysis
-
 Generate comprehensive weekly engineering summaries with:
 - **All branch analysis** (including feature branches)
 - **AI-powered summarization** per repository
@@ -15,11 +14,9 @@ Generate comprehensive weekly engineering summaries with:
 - **Business-focused aggregation**
 
 ## Execution Flow
-
 When `/weekly_summary` is invoked, follow these steps:
 
 ### Step 1: Calculate This Week's Date Range
-
 ```bash
 python3 -c "
 from datetime import datetime, timedelta
@@ -32,7 +29,6 @@ print(f'{monday.strftime(\"%Y-%m-%d\")}|{sunday.strftime(\"%Y-%m-%d\")}')"
 Store the output as `MONDAY` and `SUNDAY`.
 
 ### Step 2: Collect Commits from ALL Branches
-
 ```bash
 bash .claude/skills/weekly_summary/collect_all_branches.sh "$MONDAY" "$SUNDAY"
 ```
@@ -43,10 +39,9 @@ This creates `/tmp/weekly_commits_by_repo/<repo>.txt` files with:
 - Complete commit messages with bodies
 
 ### Step 3: Spawn AI Agents for Each Repository
-
 For each repository with activity, spawn the **weekly-repo-analyzer** custom agent:
 
-```
+```text
 Task(
   subagent_type="weekly-repo-analyzer",
   model="haiku",
@@ -64,10 +59,9 @@ The custom agent has built-in knowledge of:
 - Component health assessment logic
 
 #### Simple Agent Prompt
-
 Since the `weekly-repo-analyzer` agent has all the context built-in, just tell it the file path:
 
-```
+```text
 Analyze the commits in /tmp/weekly_commits_by_repo/{repo_file}.txt for {repo_name}.
 
 Week: {MONDAY} to {SUNDAY}
@@ -84,7 +78,6 @@ The agent will automatically:
 - Output structured JSON
 
 ### Step 4: Aggregate All Agent Results
-
 After all agents complete:
 
 1. Read all agent JSON outputs from Task results
@@ -111,23 +104,21 @@ python3 .claude/skills/weekly_summary/orchestrate_summary.py "$MONDAY" "$SUNDAY"
 This generates the final business summary with:
 - Executive overview
 - Component status table
-- **🚀 Alpha Deployments section** (features in testing)
+- **Alpha Deployments section** (features in testing)
 - Top initiatives (AI-aggregated)
 - Platform health
 
 ### Step 5: Save Reports
-
-```
+```text
 ai_docs/weekly-summaries/
 ├── YYYY-MM-DD-business-summary.md  ← Executive report
 └── YYYY-MM-DD-technical-summary.md ← Engineering details
 ```
 
 ## Example Agent Spawning
-
 Spawn all 12 repo agents in parallel:
 
-```
+```text
 // In one response, call Task tool 12 times:
 
 Task(subagent_type="Explore", description="Analyze web-app", prompt="...")
@@ -137,7 +128,6 @@ Task(subagent_type="Explore", description="Analyze data-cluster", prompt="...")
 ```
 
 ## Repositories to Analyze
-
 - web-app (Backend + Frontend)
 - workers (Job processing)
 - data-pipelines (Argo workflows)
@@ -152,7 +142,6 @@ Task(subagent_type="Explore", description="Analyze data-cluster", prompt="...")
 - MCPs/mcp-openaire
 
 ## Key Innovations
-
 ✅ **Captures ALL branch activity** (not just merged)
 ✅ **AI understands context** (better than keyword matching)
 ✅ **Aggregates into initiatives** (not commit lists)
@@ -163,23 +152,22 @@ Task(subagent_type="Explore", description="Analyze data-cluster", prompt="...")
 ## Expected Output
 
 ### Business Summary
-
 ```markdown
 # Weekly Engineering Update
 ## 2026-02-02 to 2026-02-08
 
-## 🎯 Executive Overview
+## Executive Overview
 **Focus**: Platform Observability (51 changes, 11 components)
-**Health**: 🟢 Strong
+**Health**: Strong
 **Shipped**: 90 features, 115 fixes
 
-## 📊 Component Status
+## Component Status
 | Component | Status | Summary |
 |---|---|---|
-| Backend API | 🟢 | 20 features, 30 fixes |
-| Infrastructure | 🟢 | 15 features, 12 fixes |
+| Backend API | healthy | 20 features, 30 fixes |
+| Infrastructure | healthy | 15 features, 12 fixes |
 
-## 🚀 Alpha Deployments (Features in Testing)
+## Alpha Deployments (Features in Testing)
 
 ### Uptime Kuma Status Page
 **Repo**: k8s-charts • **Date**: 2026-02-04
@@ -191,14 +179,13 @@ Task(subagent_type="Explore", description="Analyze data-cluster", prompt="...")
 **Status**: Deployed to alpha (dev branch)
 **Impact**: Cross-organization data sharing capability
 
-## ✨ Top Initiatives
+## Top Initiatives
 1. Platform Observability (51 changes)
 2. Vector Search & AI (26 changes)
 3. Infrastructure Monitoring (12 changes) ← NEW!
 ```
 
 ## Troubleshooting
-
 **If agents fail**: Check `/tmp/weekly_commits_by_repo/` for commit files
 **If no alpha deployments detected**: Check for "Merge" commits to "dev" branch
 **If analysis incomplete**: Ensure Task tool has access to file reads

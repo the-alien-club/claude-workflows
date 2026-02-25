@@ -3,11 +3,9 @@ description: Implement technical plans from ai_docs/plans with verification
 ---
 
 # Implement Plan
-
 You are tasked with implementing an approved technical plan from `ai_docs/`. These plans contain phases with specific changes and success criteria.
 
 ## Getting Started
-
 When given a plan path:
 - Read the plan completely and check for any existing checkmarks (- [x])
 - Read the original ticket and all files mentioned in the plan
@@ -19,7 +17,6 @@ When given a plan path:
 If no plan path provided, ask for one.
 
 ## Implementation Philosophy
-
 Plans are carefully designed, but reality can be messy. Your job is to:
 - Follow the plan's intent while adapting to what you find
 - Implement each phase fully before moving to the next
@@ -31,7 +28,7 @@ When things don't match the plan exactly, think about why and communicate clearl
 If you encounter a mismatch:
 - STOP and think deeply about why the plan can't be followed
 - Present the issue clearly:
-  ```
+  ```text
   Issue in Phase [N]:
   Expected: [what the plan says]
   Found: [actual situation]
@@ -41,7 +38,6 @@ If you encounter a mismatch:
   ```
 
 ## Committing Changes
-
 **Use the `/commit` slash command for all commits during implementation:**
 
 ```bash
@@ -68,7 +64,6 @@ If you encounter a mismatch:
 - ✅ Use `/commit` for all commits during implementation
 
 ## Verification Approach
-
 After implementing a phase:
 - Run the success criteria checks (usually `make check test` covers everything)
 - Fix any issues before proceeding
@@ -76,7 +71,7 @@ After implementing a phase:
 - Update your progress in both the plan and your todos
 - Check off completed items in the plan file itself using Edit
 - **Pause for human verification**: After completing all automated verification for a phase, pause and inform the human that the phase is ready for manual testing. Use this format:
-  ```
+  ```text
   Phase [N] Complete - Ready for Manual Verification
 
   Automated verification passed:
@@ -92,9 +87,7 @@ If instructed to execute multiple phases consecutively, skip the pause until the
 
 do not check off items in the manual testing steps until confirmed by the user.
 
-
 ## If You Get Stuck
-
 When something isn't working as expected:
 - First, make sure you've read and understood all the relevant code
 - Consider if the codebase has evolved since the plan was written
@@ -103,7 +96,6 @@ When something isn't working as expected:
 Use sub-tasks sparingly - mainly for targeted debugging or exploring unfamiliar territory.
 
 ## Resuming Work
-
 If the plan has existing checkmarks:
 - Trust that completed work is done
 - Pick up from the first unchecked item

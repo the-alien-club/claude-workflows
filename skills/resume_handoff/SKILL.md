@@ -3,11 +3,9 @@ description: Resume work from handoff document with context analysis and validat
 ---
 
 # Resume work from a handoff document
-
 You are tasked with resuming work from a handoff document through an interactive process. These handoffs contain critical context, learnings, and next steps from previous work sessions that need to be understood and continued.
 
 ## Initial Response
-
 When this command is invoked:
 
 1. **If the path to a handoff document was provided**:
@@ -16,7 +14,6 @@ When this command is invoked:
    - Immediately read any research or plan documents that it links to under `ai_docs/plans` or `ai_docs/research`. do NOT use a sub-agent to read these critical files.
    - Begin the analysis process by ingesting relevant context from the handoff document, reading additional files it mentions
    - Then propose a course of action to the user and confirm, or ask for clarification on direction.
-
 2. **If a ticket number (like ENG-XXXX) was provided**:
    - Search Notion Features & Tasks database to find the related task
    - locate the most recent handoff document for the ticket. Tickets will be located in `ai_docs/handoffs/ENG-XXXX` where `ENG-XXXX` is the ticket number. e.g. for `ENG-2124` the handoffs would be in `ai_docs/handoffs/ENG-2124/`. **List this directory's contents.**
@@ -28,9 +25,8 @@ When this command is invoked:
    - Immediately read any research or plan documents that it links to under `ai_docs/plans` or `ai_docs/research`; do NOT use a sub-agent to read these critical files.
    - Begin the analysis process by ingesting relevant context from the handoff document, reading additional files it mentions
    - Then propose a course of action to the user and confirm, or ask for clarification on direction.
-
 3. **If no parameters provided**, respond with:
-```
+```text
 I'll help you resume work from a handoff document. Let me find the available handoffs.
 
 Which handoff would you like to resume from?
@@ -45,7 +41,6 @@ Then wait for the user's input.
 ## Process Steps
 
 ### Step 1: Read and Analyze Handoff
-
 1. **Read handoff document completely**:
    - Use the Read tool WITHOUT limit/offset parameters
    - Extract all sections:
@@ -55,11 +50,10 @@ Then wait for the user's input.
      - Artifacts
      - Action items and next steps
      - Other notes
-
 2. **Spawn focused research tasks**:
    Based on the handoff content, spawn parallel research tasks to verify current state:
 
-   ```
+   ```text
    Task 1 - Gather artifact context:
    Read all artifacts mentioned in the handoff.
    1. Read feature documents listed in "Artifacts"
@@ -78,9 +72,8 @@ Then wait for the user's input.
    - Read any new related files discovered during research
 
 ### Step 2: Synthesize and Present Analysis
-
 1. **Present comprehensive analysis**:
-   ```
+   ```text
    I've analyzed the handoff from [date] by [researcher]. Here's the current situation:
 
    **Original Tasks:**
@@ -115,14 +108,12 @@ Then wait for the user's input.
 2. **Get confirmation** before proceeding
 
 ### Step 3: Create Action Plan
-
 1. **Use TodoWrite to create task list**:
    - Convert action items from handoff into todos
    - Add any new tasks discovered during analysis
    - Prioritize based on dependencies and handoff guidance
-
 2. **Present the plan**:
-   ```
+   ```text
    I've created a task list based on the handoff and current analysis:
 
    [Show todo list]
@@ -131,38 +122,32 @@ Then wait for the user's input.
    ```
 
 ### Step 4: Begin Implementation
-
 1. **Start with the first approved task**
 2. **Reference learnings from handoff** throughout implementation
 3. **Apply patterns and approaches documented** in the handoff
 4. **Update progress** as tasks are completed
 
 ## Guidelines
-
 1. **Be Thorough in Analysis**:
    - Read the entire handoff document first
    - Verify ALL mentioned changes still exist
    - Check for any regressions or conflicts
    - Read all referenced artifacts
-
 2. **Be Interactive**:
    - Present findings before starting work
    - Get buy-in on the approach
    - Allow for course corrections
    - Adapt based on current state vs handoff state
-
 3. **Leverage Handoff Wisdom**:
    - Pay special attention to "Learnings" section
    - Apply documented patterns and approaches
    - Avoid repeating mistakes mentioned
    - Build on discovered solutions
-
 4. **Track Continuity**:
    - Use TodoWrite to maintain task continuity
    - Reference the handoff document in commits
    - Document any deviations from original plan
    - Consider creating a new handoff when done
-
 5. **Validate Before Acting**:
    - Never assume handoff state matches current state
    - Verify all file references still exist
@@ -196,8 +181,7 @@ Then wait for the user's input.
 - Need to re-evaluate strategy
 
 ## Example Interaction Flow
-
-```
+```text
 User: /resume_handoff specification/feature/handoffs/handoff-0.md
 Assistant: Let me read and analyze that handoff document...
 

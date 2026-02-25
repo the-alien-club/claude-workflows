@@ -3,9 +3,7 @@ description: Create handoff document for transferring work to another session
 ---
 
 # Create Handoff
-
 You are tasked with writing a handoff document to hand off your work to another agent in a new session. You will create a handoff document that is thorough, but also **concise**. The goal is to compact and summarize your context without losing any of the key details of what you're working on.
-
 
 ## Process
 ### 1. Filepath & Metadata
@@ -63,7 +61,6 @@ type: implementation_strategy
 ## Other Notes
 { other notes, references, or useful information - e.g. where relevant sections of the codebase are, where relevant documents are, or other important things you leanrned that you want to pass on but that don't fall into the above categories}
 ```
----
 
 ### 3. Approve and Sync
 Run `Update Notion task` to save the document.
@@ -88,8 +85,7 @@ Handoff created and synced! You can resume from this handoff in a new session wi
 ```
 </example_response>
 
----
-##.  Additional Notes & Instructions
+## Additional Notes & Instructions
 - **more information, not less**. This is a guideline that defines the minimum of what a handoff should be. Always feel free to include more information if necessary.
 - **be thorough and precise**. include both top-level objectives, and lower-level details as necessary.
 - **avoid excessive code snippets**. While a brief snippet to describe some key change is important, avoid large code blocks or diffs; do not include one unless it's necessary (e.g. pertains to an error you're debugging). Prefer using `/path/to/file.ext:line` references that an agent can follow later when it's ready, e.g. `packages/dashboard/src/app/dashboard/page.tsx:12-24`

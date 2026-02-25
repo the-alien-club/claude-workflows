@@ -1,70 +1,60 @@
 # Alien Intelligence Workflows
-
-**Production-ready development workflows for Claude Code** - Planning, research, implementation, commits, and merge requests for full-stack AI-powered development.
+**Production-ready development workflows for Claude Code**: Planning, research, implementation, commits, and merge requests for full-stack AI-powered development.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/the-alien-club/claude-workflows)
 
-## 🎯 What's Included
+## What's Included
+This plugin provides **20 slash commands** and **8 custom agents** to streamline your development workflow:
 
-This plugin provides **18 slash commands** and **8 custom agents** to streamline your development workflow:
+### Planning & Research
+- `/create_plan`: Interactive implementation planning
+- `/research_codebase`: Codebase analysis and exploration
+- `/iterate_plan`: Iterate on existing implementation plans
 
-### 📋 Planning & Research
+### Implementation
+- `/implement_plan`: Execute implementation plans with verification
+- `/validate_plan`: Validate implementation against plan criteria
+- `/debug`: Debug issues with comprehensive analysis
 
-- `/create_plan` - Interactive implementation planning
-- `/research_codebase` - Codebase analysis and exploration
-- `/iterate_plan` - Iterate on existing implementation plans
+### Git Workflows
+- `/commit`: Create conventional commits without Claude attribution
+- `/commit_msg`: Create conventional commit messages based on the git diff
+- `/merge_request`: Generate comprehensive GitLab MR descriptions
+- `/describe_pr`: Create PR descriptions
+- `/jira_mr`: Link a merged/open MR to a Jira SDS ticket, find or create the card and update it with MR info
 
-### 🛠️ Implementation
+### Specialized Workflows
+- `/oneshot`: Research and plan in one command
+- `/oneshot_plan`: Execute full feature workflow
 
-- `/implement_plan` - Execute implementation plans with verification
-- `/validate_plan` - Validate implementation against plan criteria
-- `/debug` - Debug issues with comprehensive analysis
+### Documentation & Handoffs
+- `/create_handoff`: Create handoff documents for session transfer
+- `/resume_handoff`: Resume work from handoff documentation
+- `/weekly_summary`: Generate weekly repository summaries
+- `/format_comments`: Format comments in the codebase
+- `/format_md`: Format Markdown documentation files to match the project's established style
 
-### 🔄 Git Workflows
+### DevOps & Utilities
+- `/local_review`: Set up branch review environment
+- `/batch_mr_dev_to_staging`: Batch merge request creation
 
-- `/commit` - Create conventional commits without Claude attribution
-- `/commit_msg` - Create conventional commit messages based on the git diff
-- `/merge_request` - Generate comprehensive GitLab MR descriptions
-- `/describe_pr` - Create PR descriptions
+### Custom Agents
+- **project-tracker**: Track project progress and next steps
+- **codebase-locator**: Find relevant code quickly
+- **codebase-analyzer**: Deep codebase analysis
+- **codebase-pattern-finder**: Find implementation patterns
+- **web-search-researcher**: Research with web search
+- **weekly-repo-analyzer**: Generate weekly summaries
+- **thoughts-locator** / **thoughts-analyzer**: Work with thoughts directory
 
-### 🎯 Specialized Workflows
-
-- `/oneshot` - Research and plan in one command
-- `/oneshot_plan` - Execute full feature workflow
-
-### 📚 Documentation & Handoffs
-
-- `/create_handoff` - Create handoff documents for session transfer
-- `/resume_handoff` - Resume work from handoff documentation
-- `/weekly_summary` - Generate weekly repository summaries
-- `/format_comments` - Format comments in the codebase
-
-### 🔧 DevOps & Utilities
-
-- `/local_review` - Set up branch review environment
-- `/batch_mr_dev_to_staging` - Batch merge request creation
-
-### 🤖 Custom Agents
-
-- **project-tracker** - Track project progress and next steps
-- **codebase-locator** - Find relevant code quickly
-- **codebase-analyzer** - Deep codebase analysis
-- **codebase-pattern-finder** - Find implementation patterns
-- **web-search-researcher** - Research with web search
-- **weekly-repo-analyzer** - Generate weekly summaries
-- **thoughts-locator** / **thoughts-analyzer** - Work with thoughts directory
-
-## 📦 Installation
-
+## Installation
 ### Option 1: Install from GitHub (Recommended)
-
 ```bash
 /plugin install https://github.com/the-alien-club/claude-workflows.git
 ```
 
 ### Option 2: Install from Zip
-
 1. Download the latest release
 2. Run:
    ```bash
@@ -72,13 +62,11 @@ This plugin provides **18 slash commands** and **8 custom agents** to streamline
    ```
 
 ### Option 3: Local Development
-
 ```bash
 claude --plugin-dir /path/to/claude-workflows
 ```
 
-## 🚀 Quick Start
-
+## Quick Start
 After installation, all commands are available with the plugin namespace:
 
 ```bash
@@ -94,12 +82,9 @@ After installation, all commands are available with the plugin namespace:
 
 Run `/help` to see all available commands.
 
-## 📖 Command Details
-
+## Command Details
 ### Planning Commands
-
 #### `/create_plan`
-
 Creates detailed implementation plans through interactive research.
 
 **Features:**
@@ -114,7 +99,6 @@ Creates detailed implementation plans through interactive research.
 ```
 
 #### `/implement_plan`
-
 Executes approved implementation plans with continuous verification.
 
 **Features:**
@@ -130,9 +114,7 @@ Executes approved implementation plans with continuous verification.
 ```
 
 ### Git Commands
-
 #### `/commit`
-
 Creates conventional commits without Claude attribution.
 
 **Features:**
@@ -148,7 +130,6 @@ Creates conventional commits without Claude attribution.
 ```
 
 #### `/merge_request`
-
 Creates comprehensive GitLab merge requests by analyzing feature branches.
 
 **Features:**
@@ -162,10 +143,8 @@ Creates comprehensive GitLab merge requests by analyzing feature branches.
 /alien-intelligence-workflows:merge_request
 ```
 
-## 🎨 Workflow Patterns
-
+## Workflow Patterns
 ### Feature Development Workflow
-
 ```bash
 # 1. Research the codebase
 /alien-intelligence-workflows:research_codebase_nt authentication
@@ -184,7 +163,6 @@ Creates comprehensive GitLab merge requests by analyzing feature branches.
 ```
 
 ### Bug Fix Workflow
-
 ```bash
 # 1. Debug the issue
 /alien-intelligence-workflows:debug
@@ -197,7 +175,6 @@ Creates comprehensive GitLab merge requests by analyzing feature branches.
 ```
 
 ### Documentation Handoff
-
 ```bash
 # At end of session
 /alien-intelligence-workflows:create_handoff
@@ -206,23 +183,19 @@ Creates comprehensive GitLab merge requests by analyzing feature branches.
 /alien-intelligence-workflows:resume_handoff ai_docs/handoffs/2025-02-16-auth-implementation.md
 ```
 
-## 🔧 Configuration
-
+## Configuration
 ### Prerequisites
-
 The following tools should be installed:
-- `git` - Version control
-- `glab` - GitLab CLI (for merge requests)
+- `git`: Version control
+- `glab`: GitLab CLI (for merge requests)
 - Node.js / Python / Go (depending on your stack)
 
 ### Environment Variables
-
 Commands respect standard environment variables:
-- `EDITOR` - Default editor for interactive commands
-- `GIT_AUTHOR_NAME`, `GIT_AUTHOR_EMAIL` - Git configuration
+- `EDITOR`: Default editor for interactive commands
+- `GIT_AUTHOR_NAME`, `GIT_AUTHOR_EMAIL`: Git configuration
 
-## 🆙 Updating the Plugin
-
+## Updating the Plugin
 ```bash
 # Update to latest version
 /plugin update alien-intelligence-workflows
@@ -232,8 +205,7 @@ Commands respect standard environment variables:
 /plugin install https://github.com/the-alien-club/claude-workflows.git
 ```
 
-## 🤝 Contributing
-
+## Contributing
 This plugin is maintained by Alien Intelligence for internal use. If you're part of the team:
 
 1. Clone the repo
@@ -242,17 +214,13 @@ This plugin is maintained by Alien Intelligence for internal use. If you're part
 4. Create a merge request
 5. After merge, team updates with `/plugin update`
 
-## 📜 License
-
+## License
 MIT License - See [LICENSE](LICENSE) for details.
 
-## 🔗 Links
-
+## Links
 - **GitHub**: https://github.com/the-alien-club/claude-workflows
 - **Alien Intelligence**: https://alien.club
 - **Claude Code Docs**: https://code.claude.com/docs
-
----
 
 **Built with ❤️ by Alien Intelligence**
 

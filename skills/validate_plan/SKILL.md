@@ -3,20 +3,16 @@ description: Validate implementation against plan, verify success criteria, iden
 ---
 
 # Validate Plan
-
 You are tasked with validating that an implementation plan was correctly executed, verifying all success criteria and identifying any deviations or issues.
 
 ## Initial Setup
-
 When invoked:
-1. **Determine context** - Are you in an existing conversation or starting fresh?
+1. **Determine context**: Are you in an existing conversation or starting fresh?
    - If existing: Review what was implemented in this session
    - If fresh: Need to discover what was done through git and codebase analysis
-
 2. **Locate the plan**:
    - If plan path provided, use it
    - Otherwise, search recent commits for plan references or ask user
-
 3. **Gather implementation evidence**:
    ```bash
    # Check recent commits
@@ -30,7 +26,6 @@ When invoked:
 ## Validation Process
 
 ### Step 1: Context Discovery
-
 If starting fresh or need more context:
 
 1. **Read the implementation plan** completely
@@ -38,9 +33,8 @@ If starting fresh or need more context:
    - List all files that should be modified
    - Note all success criteria (automated and manual)
    - Identify key functionality to verify
-
 3. **Spawn parallel research tasks** to discover implementation:
-   ```
+   ```text
    Task 1 - Verify database changes:
    Research if migration [N] was added and schema changes match plan.
    Check: migration files, schema version, table structure
@@ -58,29 +52,24 @@ If starting fresh or need more context:
    ```
 
 ### Step 2: Systematic Validation
-
 For each phase in the plan:
 
 1. **Check completion status**:
    - Look for checkmarks in the plan (- [x])
    - Verify the actual code matches claimed completion
-
 2. **Run automated verification**:
    - Execute each command from "Automated Verification"
    - Document pass/fail status
    - If failures, investigate root cause
-
 3. **Assess manual criteria**:
    - List what needs manual testing
    - Provide clear steps for user verification
-
 4. **Think deeply about edge cases**:
    - Were error conditions handled?
    - Are there missing validations?
    - Could the implementation break existing functionality?
 
 ### Step 3: Generate Validation Report
-
 Create comprehensive validation summary:
 
 ```markdown
@@ -127,7 +116,6 @@ Create comprehensive validation summary:
 ```
 
 ## Working with Existing Context
-
 If you were part of the implementation:
 - Review the conversation history
 - Check your todo list for what was completed
@@ -135,15 +123,13 @@ If you were part of the implementation:
 - Be honest about any shortcuts or incomplete items
 
 ## Important Guidelines
-
-1. **Be thorough but practical** - Focus on what matters
-2. **Run all automated checks** - Don't skip verification commands
-3. **Document everything** - Both successes and issues
-4. **Think critically** - Question if the implementation truly solves the problem
-5. **Consider maintenance** - Will this be maintainable long-term?
+1. **Be thorough but practical**: Focus on what matters
+2. **Run all automated checks**: Don't skip verification commands
+3. **Document everything**: Both successes and issues
+4. **Think critically**: Question if the implementation truly solves the problem
+5. **Consider maintenance**: Will this be maintainable long-term?
 
 ## Validation Checklist
-
 Always verify:
 - [ ] All phases marked complete are actually done
 - [ ] Automated tests pass
@@ -154,13 +140,12 @@ Always verify:
 - [ ] Manual test steps are clear
 
 ## Relationship to Other Commands
-
 Recommended workflow:
-1. `/create_plan` - Create implementation plan and feature branch
-2. `/implement_plan` - Execute the implementation
-3. `/commit` - Create atomic commits after each phase
-4. `/validate_plan` - Verify implementation correctness (you are here)
-5. `/merge_request` - Create GitLab MR with comprehensive description
+1. `/create_plan`: Create implementation plan and feature branch
+2. `/implement_plan`: Execute the implementation
+3. `/commit`: Create atomic commits after each phase
+4. `/validate_plan`: Verify implementation correctness (you are here)
+5. `/merge_request`: Create GitLab MR with comprehensive description
 
 The validation works best after commits are made, as it can analyze the git history to understand what was implemented. After validation passes, use `/merge_request` to create the MR.
 

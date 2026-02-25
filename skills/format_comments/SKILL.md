@@ -3,7 +3,6 @@ description: This document defines the natural comment style used throughout the
 ---
 
 # Comment Style Guide
-
 You are tasked with ensuring that all comments in the codebase adhere to the defined style guide.
 
 This document defines the natural comment style used throughout the codebase,
@@ -14,21 +13,17 @@ for them to follow the original style (before-AI).
 in order to only change the latest files and not have to go through the entire codebase.
 
 ## JSDoc Comments
-
 ### Principles
-
-1. **Use natural prose** - Write comments as flowing sentences, not bullet points
-2. **Replace " - " with ", "** - Use commas instead of dashes, with lowercase after the comma
-3. **Break long lines naturally** - Split descriptions across multiple lines where it reads well
-4. **Use "Note:" for single notes** - Capitalize "Note:" as it starts a new sentence
-5. **Use "Notes:" for multiple notes** - Keep it plural when there are multiple points
-6. **Always end with a period** - Multi-line comments (/** */) should end with proper punctuation
-7. **No emojis** - Never use emojis in comments (exception: UI components displaying emojis)
+1. **Use natural prose**: Write comments as flowing sentences, not bullet points
+2. **Replace " - " with ", "**: Use commas instead of dashes, with lowercase after the comma
+3. **Break long lines naturally**: Split descriptions across multiple lines where it reads well
+4. **Use "Note:" for single notes**: Capitalize "Note:" as it starts a new sentence
+5. **Use "Notes:" for multiple notes**: Keep it plural when there are multiple points
+6. **Always end with a period**: Multi-line comments (/** */) should end with proper punctuation
+7. **No emojis**: Never use emojis in comments (exception: UI components displaying emojis)
 
 ### Examples
-
 #### Before (avoid)
-
 ```typescript
 /**
  * Validator for chart version update endpoint.
@@ -46,7 +41,6 @@ in order to only change the latest files and not have to go through the entire c
 ```
 
 #### After (preferred)
-
 ```typescript
 /**
  * Validator for chart version update endpoint, used to update the Helm
@@ -63,7 +57,6 @@ in order to only change the latest files and not have to go through the entire c
 ```
 
 ### More Examples
-
 ```typescript
 /**
  * Get all licenses, with the option to only show the user's registered licenses
@@ -82,7 +75,6 @@ in order to only change the latest files and not have to go through the entire c
 ```
 
 ### More Examples from nodes_controller.ts
-
 ```typescript
 /**
  * Get all the enabled (and for streaming only) registered nodes with the option to filter by category.
@@ -117,21 +109,17 @@ in order to only change the latest files and not have to go through the entire c
 ```
 
 ## Inline Comments
-
 ### Principles
-
-1. **Start with uppercase** - First letter should be capitalized (like a sentence)
-2. **Keep them concise** - One line when possible
-3. **Be descriptive** - Explain the "why", not the obvious "what"
-4. **Never end with a period** - Single-line comments (starting with //) should not have end punctuation
-5. **No emojis** - Never use emojis in comments (exception: UI components displaying emojis)
-6. **TODOs use uppercase** - Format: `// TODO: description`
-7. **Don't change good comments** - Comments that are already clear and follow the format (like "// Relationships" or "// Many-to-many relationship with the `tags` table") should be left as-is
+1. **Start with uppercase**: First letter should be capitalized (like a sentence)
+2. **Keep them concise**: One line when possible
+3. **Be descriptive**: Explain the "why", not the obvious "what"
+4. **Never end with a period**: Single-line comments (starting with //) should not have end punctuation
+5. **No emojis**: Never use emojis in comments (exception: UI components displaying emojis)
+6. **TODOs use uppercase**: Format: `// TODO: description`
+7. **Don't change good comments**: Comments that are already clear and follow the format (like "// Relationships" or "// Many-to-many relationship with the `tags` table") should be left as-is
 
 ### Examples
-
 #### Before (avoid)
-
 ```typescript
 // Check If License Exists
 const license = await License.find(id)
@@ -141,7 +129,6 @@ licenses = await License.query()
 ```
 
 #### After (preferred)
-
 ```typescript
 // Check if any other license with the same name already exists (non-isolated)
 const existingLicense = await License.query().where("name", name).first()
@@ -157,7 +144,6 @@ isVerified: false
 ```
 
 ### TODO Comments
-
 ```typescript
 // TODO: We should prevent users from updating verified licenses and/or licenses
 // that are referenced anywhere
@@ -166,7 +152,6 @@ isVerified: false
 ```
 
 ### More Inline Examples from nodes_controller.ts
-
 ```typescript
 // Check if node exists by type (unique identifier)
 let node = await Node.query().where("type", type).first()
@@ -201,9 +186,7 @@ await node.load("tags")
 ```
 
 ## Key Patterns for Natural Comments
-
 ### Use Parenthetical Asides
-
 Add context or clarification in parentheses within the main sentence:
 ```typescript
 // Good:
@@ -219,7 +202,6 @@ let node = await Node.query().where("type", type).first()
 ```
 
 ### Multi-line Notes
-
 When a note needs additional context, continue on the next line naturally:
 ```typescript
 // Good:
@@ -233,7 +215,6 @@ When a note needs additional context, continue on the next line naturally:
 ```
 
 ### Simple Action Comments
-
 Use simple, direct language for inline comments:
 ```typescript
 // Good:
@@ -251,7 +232,6 @@ await node.load("tags")
 ```
 
 ### Avoid Over-explaining
-
 Don't add comments for obvious operations:
 ```typescript
 // Bad (too obvious):
@@ -264,7 +244,6 @@ isVerified: false
 ```
 
 ## Quick Reference
-
 | Type       | Style                          | Example                                                 |
 |------------|--------------------------------|---------------------------------------------------------|
 | JSDoc main | Natural prose, comma-separated | `Get all licenses, with the option to filter by status` |
@@ -273,18 +252,15 @@ isVerified: false
 | TODO       | Uppercase TODO                 | `// TODO: Add validation for external URLs`             |
 
 ## When to Use Each Type
-
-- **JSDoc** - For functions, classes, types, and exported constants
-- **Inline comments** - For complex logic that needs explanation
-- **TODO comments** - For future improvements or known limitations
-- **No comment** - When the code is self-explanatory
+- **JSDoc**: For functions, classes, types, and exported constants
+- **Inline comments**: For complex logic that needs explanation
+- **TODO comments**: For future improvements or known limitations
+- **No comment**: When the code is self-explanatory
 
 ## Punctuation Rules
-
 ### End Dots (Periods)
-
-- **Multi-line comments (/** */)** - Always end with a period
-- **Single-line comments (//)** - Never end with a period
+- **Multi-line comments (/** */)**: Always end with a period
+- **Single-line comments (//)**: Never end with a period
 
 ```typescript
 // Correct:
@@ -307,13 +283,11 @@ const license = await License.find(id)
 ```
 
 ## Code References
-
 When you see the name of a class, function, variable, type, or any other code element written as-is in comments:
-- **In multi-line comments (JSDoc)** - Surround it with backticks `` (e.g., `ClassName`, `functionName()`)
-- **In single-line comments (//)** - Surround it with double quotes "" (e.g., "organizationId", "externalApis")
+- **In multi-line comments (JSDoc)**: Surround it with backticks `` (e.g., `ClassName`, `functionName()`)
+- **In single-line comments (//)**: Surround it with double quotes "" (e.g., "organizationId", "externalApis")
 
 ### Examples
-
 ```typescript
 // Correct:
 /**
@@ -342,7 +316,6 @@ organization.organizationId = newId
 ```
 
 ## Emojis
-
 **Never use emojis in code comments.** If you see emojis in comments, remove them.
 **Exception:** Emojis are allowed in UI components where they're displayed to users.
 
@@ -370,7 +343,6 @@ return <Button>Save Changes [disk icon]</Button>
 ```
 
 ## Common Replacements
-
 - `- Fetches data` -> `, fetches data`
 - `SECURITY:` -> `Note:` (unless multiple, then `Notes:` with a list where each line has "- ")
 - `This function does X. - It also does Y.` -> `This function does X, it also does Y`
@@ -379,9 +351,7 @@ return <Button>Save Changes [disk icon]</Button>
 - `/** Get user */` -> `/** Get user. */`
 - `// [emoji] Launch process` -> `// Launch process`
 
-
 ## Functions JSDoc
-
 - **Always end with a period.**
 - **Use the correct tense.**
 - **Use descriptive comments.**
@@ -398,6 +368,5 @@ export async function verifyTokenCode(code: string, tokenHash: string): Promise<
 ```
 
 ## AI Slop
-
 - Try to remove `Step X` from the comments, as they can become outdated or irrelevant.
 - Remove any `---- comment ----` lines.

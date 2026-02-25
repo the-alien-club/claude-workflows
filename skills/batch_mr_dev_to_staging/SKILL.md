@@ -4,13 +4,11 @@ model: opus
 ---
 
 # Batch Merge Requests: Dev → Staging
-
 You are tasked with creating merge requests from `dev` to `staging` branch across all repositories in the DataStreaming monorepo by spawning parallel agents for each repository.
 
 ## Initial Response
-
 When this command is invoked, respond with:
-```
+```text
 I'll help you create merge requests from dev to staging across all repositories. Let me analyze which repositories have changes and spawn agents to handle each one.
 ```
 
@@ -19,23 +17,21 @@ Then proceed immediately to repository discovery.
 ## Process Steps
 
 ### Step 1: Identify All Repositories
-
 The DataStreaming monorepo contains these primary repositories:
 
-1. **web-app/** - Frontend (Next.js) + Backend (AdonisJS) monorepo
-2. **workers/** - Python async job processing
-3. **data-pipelines/** - Argo Workflows with Hera SDK
-4. **data-cluster/** - FastAPI client cluster data API
-5. **data-cluster-operator/** - Kopf-based K8s operator
-6. **data-cluster-helm/** - Multi-tenant Helm infrastructure
-7. **k8s-charts/** - Platform ArgoCD GitOps deployment
-8. **MCPs/** - MCP servers for AI assistant tools
-9. **skupper-gateway/** - Skupper networking gateway
+1. **web-app/**: Frontend (Next.js) + Backend (AdonisJS) monorepo
+2. **workers/**: Python async job processing
+3. **data-pipelines/**: Argo Workflows with Hera SDK
+4. **data-cluster/**: FastAPI client cluster data API
+5. **data-cluster-operator/**: Kopf-based K8s operator
+6. **data-cluster-helm/**: Multi-tenant Helm infrastructure
+7. **k8s-charts/**: Platform ArgoCD GitOps deployment
+8. **MCPs/**: MCP servers for AI assistant tools
+9. **skupper-gateway/**: Skupper networking gateway
 
 **Note**: Each repository is a subdirectory in the monorepo, not a separate git repository. They share the same git history.
 
 ### Step 2: Check Repository Status
-
 For each repository, check:
 
 1. **Does the repository have both dev and staging branches?**
@@ -45,23 +41,20 @@ For each repository, check:
    ```
    - If both exist: Continue
    - If missing: Skip this repository (inform user)
-
 2. **Are there commits in dev not in staging?**
    ```bash
    git log staging..dev --oneline -- [repository-path]/
    ```
    - If commits exist: Repository needs MR
    - If no commits: Skip (already synced)
-
 3. **Identify repositories needing MRs**:
    - Create a summary list showing which repos have changes
    - Show commit count per repository
    - Display to user before proceeding
 
 ### Step 3: Confirm with User
-
 Present findings to user:
-```
+```text
 Found the following repositories with changes from dev to staging:
 
 1. web-app/ - 12 commits
@@ -82,7 +75,6 @@ Would you like me to create merge requests for the 4 repositories with changes? 
 If user says no, stop. If yes, proceed to Step 4.
 
 ### Step 4: Create Feature Branches for Each Repository
-
 For each repository needing an MR, create a feature branch:
 
 ```bash
@@ -105,12 +97,11 @@ git checkout -b release/[repo-name]-staging-sync-[date]
   - `release/k8s-charts-staging-sync-2026-02-13`
 
 ### Step 5: Spawn Parallel Agents for MR Creation
-
 **CRITICAL**: Use the Task tool to spawn multiple agents in parallel. Create ONE task per repository.
 
 For each repository needing an MR, spawn an agent with this prompt template:
 
-```
+```text
 Create a merge request from dev to staging for the [REPO_NAME] repository.
 
 Repository: [REPO_PATH]
@@ -171,7 +162,7 @@ DO NOT create commits. This is a branch merge, not new code.
 
 **Example agent spawning** (in a single message with multiple Task calls):
 
-```
+```text
 Task 1: web-app MR creation
 Task 2: workers MR creation
 Task 3: k8s-charts MR creation
@@ -179,7 +170,6 @@ Task 4: data-cluster MR creation
 ```
 
 ### Step 6: Wait for All Agents to Complete
-
 **IMPORTANT**: Wait for ALL spawned agents to complete before proceeding.
 
 Collect results from each agent:
@@ -189,7 +179,6 @@ Collect results from each agent:
 - Any errors encountered
 
 ### Step 7: Generate Summary Report
-
 Create a comprehensive summary:
 
 ```markdown
@@ -201,25 +190,25 @@ Create a comprehensive summary:
 **Failed MRs**: [N]
 **Already Synced**: [N]
 
-### ✅ Successfully Created MRs
+### Successfully Created MRs
 
 1. **web-app**
    - MR URL: [URL]
    - MR #: !123
    - Commits: 12
-   - Status: ✅ Created
+   - Status: Created
 
 2. **workers**
    - MR URL: [URL]
    - MR #: !124
    - Commits: 5
-   - Status: ✅ Created
+   - Status: Created
 
-### ❌ Failed MRs
+### Failed MRs
 
 [List any failures with error messages]
 
-### ℹ️ Already Synced (No Changes)
+### Already Synced (No Changes)
 
 - data-pipelines/
 - data-cluster-operator/
@@ -239,9 +228,8 @@ Create a comprehensive summary:
 ```
 
 ### Step 8: Offer Notion Integration
-
 Ask user:
-```
+```text
 Would you like me to:
 1. Create a Notion task to track this staging release?
 2. Update any existing release tasks with MR URLs?
@@ -253,8 +241,8 @@ Would you like me to:
 If user chooses 1:
 - Create a new task in Notion Features & Tasks database
 - Title: "Staging Release: Dev → Staging Sync [Date]"
-- Type: 🚢 Deployment
-- Status: 👀 In Review
+- Type: Deployment
+- Status: In Review
 - Components: All affected repositories
 - Description: Link all MR URLs and summary
 
@@ -263,7 +251,6 @@ If user chooses 2:
 - Update with MR URLs in comments
 
 ## Important Notes
-
 1. **Parallel Execution**: Spawn all agents in a SINGLE message with multiple Task tool calls
 2. **Repository Isolation**: Each agent works independently on its repository
 3. **No New Commits**: This is a branch merge, not new code changes
@@ -276,14 +263,14 @@ If user chooses 2:
 ## Error Handling
 
 ### No Changes Found
-```
+```text
 No repositories have changes from dev to staging. All repositories are already synced.
 
 Would you like me to check again or verify branch status?
 ```
 
 ### Git Branch Issues
-```
+```text
 Error: [Repository] is missing dev or staging branch.
 
 This repository may use a different branching strategy. Would you like to:
@@ -293,7 +280,7 @@ This repository may use a different branching strategy. Would you like to:
 ```
 
 ### Agent Failure
-```
+```text
 Warning: Failed to create MR for [repository]
 
 Error: [error message from agent]
@@ -305,7 +292,7 @@ Would you like me to:
 ```
 
 ### GitLab API Errors
-```
+```text
 Error: GitLab API rate limit exceeded or authentication failed.
 
 Please check:
@@ -345,35 +332,33 @@ Would you like me to retry after you've resolved the issue?
 - Note Kopf framework changes
 
 ## Example Interaction
-
-```
+```text
 User: /batch_mr_dev_to_staging
+Assistant: I'll help you create merge requests from dev to staging across all repositories. Let me analyze which repositories have changes and spawn agents to handle each one.
 
-Assistant: I'll help you create merge requests from dev to staging across all repositories. Let me analyze which repositories have changes...
-
-[Checking repositories]
+[Checking repositories...]
 
 Found the following repositories with changes from dev to staging:
 
 1. web-app/ - 12 commits
-2. workers/ - 5 commits  
+2. workers/ - 5 commits
 3. k8s-charts/ - 8 commits
 
 Repositories already synced (no changes):
 - data-pipelines/
-- data-cluster/
 - data-cluster-operator/
+- data-cluster-helm/
+- data-cluster/
 - MCPs/
+- skupper-gateway/
 
 Would you like me to create merge requests for the 3 repositories with changes? (yes/no)
 
 User: yes
-
 Assistant: Creating feature branches and spawning parallel agents for MR creation...
 
-[Spawns 3 Task agents in parallel - one for each repository]
-
-[After all agents complete]
+[Spawning 3 parallel agents]
+[Waiting for completion...]
 
 ## Batch MR Creation Summary: Dev → Staging
 
@@ -383,32 +368,32 @@ Assistant: Creating feature branches and spawning parallel agents for MR creatio
 **Failed MRs**: 0
 **Already Synced**: 6
 
-### ✅ Successfully Created MRs
+### Successfully Created MRs
 
 1. **web-app**
-   - MR URL: https://gitlab.com/alias3/datastreaming/-/merge_requests/245
-   - MR #: \!245
+   - MR URL: https://gitlab.com/org/repo/-/merge_requests/123
+   - MR #: !123
    - Commits: 12
-   - Status: ✅ Created
+   - Status: Created
 
 2. **workers**
-   - MR URL: https://gitlab.com/alias3/datastreaming/-/merge_requests/246
-   - MR #: \!246
+   - MR URL: https://gitlab.com/org/repo/-/merge_requests/124
+   - MR #: !124
    - Commits: 5
-   - Status: ✅ Created
+   - Status: Created
 
 3. **k8s-charts**
-   - MR URL: https://gitlab.com/alias3/datastreaming/-/merge_requests/247
-   - MR #: \!247
+   - MR URL: https://gitlab.com/org/repo/-/merge_requests/125
+   - MR #: !125
    - Commits: 8
-   - Status: ✅ Created
+   - Status: Created
 
-### ℹ️ Already Synced (No Changes)
+### Already Synced (No Changes)
 
 - data-pipelines/
-- data-cluster/
 - data-cluster-operator/
 - data-cluster-helm/
+- data-cluster/
 - MCPs/
 - skupper-gateway/
 
@@ -418,12 +403,13 @@ Assistant: Creating feature branches and spawning parallel agents for MR creatio
 2. Run staging deployment tests
 3. Approve and merge MRs
 4. Monitor staging environment after deployment
+5. Create follow-up MRs from staging to production when ready
 
 ### Quick Links
 
-- web-app MR: https://gitlab.com/alias3/datastreaming/-/merge_requests/245
-- workers MR: https://gitlab.com/alias3/datastreaming/-/merge_requests/246
-- k8s-charts MR: https://gitlab.com/alias3/datastreaming/-/merge_requests/247
+- https://gitlab.com/org/repo/-/merge_requests/123
+- https://gitlab.com/org/repo/-/merge_requests/124
+- https://gitlab.com/org/repo/-/merge_requests/125
 
 Would you like me to:
 1. Create a Notion task to track this staging release?
@@ -434,23 +420,18 @@ Would you like me to:
 ```
 
 ## Quality Checklist
-
-Before completing, verify:
-- [ ] All repositories checked for dev→staging differences
-- [ ] User confirmed before creating MRs
-- [ ] Parallel agents spawned in single message
-- [ ] Feature branches created with consistent naming
-- [ ] All MR descriptions follow template
-- [ ] Summary report generated with all results
-- [ ] User offered Notion integration option
-- [ ] Quick links provided for all created MRs
+Before completing the batch MR creation, verify:
+- [ ] All repositories checked for dev/staging branch existence
+- [ ] Only repositories with actual changes have MRs created
+- [ ] Branch naming follows `release/[repo]-staging-sync-[date]` format
+- [ ] All agents completed successfully
+- [ ] MR titles follow conventional commit format
+- [ ] All MR URLs captured in summary
+- [ ] User informed of any failures or skipped repositories
 
 ## Related Commands
+- `/merge_request`: Create a single MR for a feature branch
+- `/create_plan`: Plan a new feature or refactor
+- `/research_codebase`: Research current state before creating MRs
 
-- `/merge_request` - Create single MR from current feature branch
-- `/ci_describe_pr` - Generate PR description for single repository
-- `/commit` - Create conventional commits before creating MRs
-
----
-
-**Note**: This command is designed for promoting tested code from dev to staging as part of the release process. For individual feature development, use `/merge_request` instead.
+> **Note**: This skill is designed for the DataStreaming monorepo's specific repository structure. Adapt the repository list in Step 1 if the monorepo structure changes.
