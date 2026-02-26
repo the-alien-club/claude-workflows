@@ -32,8 +32,8 @@ This plugin provides **20 slash commands** and **8 custom agents** to streamline
 - `/create_handoff`: Create handoff documents for session transfer
 - `/resume_handoff`: Resume work from handoff documentation
 - `/weekly_summary`: Generate weekly repository summaries
-- `/format_comments`: Format comments in the codebase
-- `/format_md`: Format Markdown documentation files to match the project's established style
+- `/format_comments`: Format comments in the codebase to follow the natural prose style guide
+- `/format_md`: Format Markdown documentation files, enforcing heading spacing, table alignment, separator rules (no em dashes, no inline dashes), and list style
 
 ### DevOps & Utilities
 - `/local_review`: Set up branch review environment

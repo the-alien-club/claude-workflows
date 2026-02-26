@@ -27,11 +27,11 @@ You are tasked with creating git commit messages for the changes made during thi
 - Do not include any "Generated with Claude" messages
 - Do not add "Co-Authored-By" lines
 - Write commit messages as if the user wrote them
-- **Conventional commit titles must be lowercase** - the first line (type and description) should always use lowercase letters (e.g., `feat: add new feature` not `feat: Add new feature`)
+- **Conventional commit titles must be lowercase**: the first line (type and description) should always use lowercase letters (e.g., `feat: add new feature` not `feat: Add new feature`)
 - Commit description should be in the past tense (e.g., `Introduced` instead of `Introduce`)
 
 ## Remember:
 - You have the full context of what was done in this session
 - Group related changes together
 - Keep commits focused and atomic when possible
-- The user trusts your judgment - they asked you to create a git commit message that reflects the changes made during this session
+- The user trusts your judgment, they asked you to create a git commit message that reflects the changes made during this session

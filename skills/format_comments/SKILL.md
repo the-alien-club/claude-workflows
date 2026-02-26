@@ -14,13 +14,13 @@ in order to only change the latest files and not have to go through the entire c
 
 ## JSDoc Comments
 ### Principles
-1. **Use natural prose**: Write comments as flowing sentences, not bullet points
-2. **Replace " - " with ", "**: Use commas instead of dashes, with lowercase after the comma
-3. **Break long lines naturally**: Split descriptions across multiple lines where it reads well
-4. **Use "Note:" for single notes**: Capitalize "Note:" as it starts a new sentence
-5. **Use "Notes:" for multiple notes**: Keep it plural when there are multiple points
-6. **Always end with a period**: Multi-line comments (/** */) should end with proper punctuation
-7. **No emojis**: Never use emojis in comments (exception: UI components displaying emojis)
+1. **Use natural prose**: write comments as flowing sentences, not bullet points
+2. **Replace " - " with ", "**: use commas instead of dashes, with lowercase after the comma
+3. **Break long lines naturally**: split descriptions across multiple lines where it reads well
+4. **Use "Note:" for single notes**: capitalize "Note:" as it starts a new sentence
+5. **Use "Notes:" for multiple notes**: keep it plural when there are multiple points
+6. **Always end with a period**: multi-line comments (`/** */`) should end with proper punctuation
+7. **No emojis**: never use emojis in comments (exception: UI components displaying emojis)
 
 ### Examples
 #### Before (avoid)
@@ -110,13 +110,13 @@ in order to only change the latest files and not have to go through the entire c
 
 ## Inline Comments
 ### Principles
-1. **Start with uppercase**: First letter should be capitalized (like a sentence)
-2. **Keep them concise**: One line when possible
-3. **Be descriptive**: Explain the "why", not the obvious "what"
-4. **Never end with a period**: Single-line comments (starting with //) should not have end punctuation
-5. **No emojis**: Never use emojis in comments (exception: UI components displaying emojis)
-6. **TODOs use uppercase**: Format: `// TODO: description`
-7. **Don't change good comments**: Comments that are already clear and follow the format (like "// Relationships" or "// Many-to-many relationship with the `tags` table") should be left as-is
+1. **Start with uppercase**: first letter should be capitalized (like a sentence)
+2. **Keep them concise**: one line when possible
+3. **Be descriptive**: explain the "why", not the obvious "what"
+4. **Never end with a period**: single-line comments (starting with `//`) should not have end punctuation
+5. **No emojis**: never use emojis in comments (exception: UI components displaying emojis)
+6. **TODOs use uppercase**: format: `// TODO: description`
+7. **Don't change good comments**: comments that are already clear and follow the format (like "// Relationships" or "// Many-to-many relationship with the `tags` table") should be left as-is
 
 ### Examples
 #### Before (avoid)
@@ -252,15 +252,15 @@ isVerified: false
 | TODO       | Uppercase TODO                 | `// TODO: Add validation for external URLs`             |
 
 ## When to Use Each Type
-- **JSDoc**: For functions, classes, types, and exported constants
-- **Inline comments**: For complex logic that needs explanation
-- **TODO comments**: For future improvements or known limitations
-- **No comment**: When the code is self-explanatory
+- **JSDoc**: for functions, classes, types, and exported constants
+- **Inline comments**: for complex logic that needs explanation
+- **TODO comments**: for future improvements or known limitations
+- **No comment**: when the code is self-explanatory
 
 ## Punctuation Rules
 ### End Dots (Periods)
-- **Multi-line comments (/** */)**: Always end with a period
-- **Single-line comments (//)**: Never end with a period
+- **Multi-line comments (`/** */`)**: always end with a period
+- **Single-line comments (`//`)**: never end with a period
 
 ```typescript
 // Correct:
@@ -284,8 +284,8 @@ const license = await License.find(id)
 
 ## Code References
 When you see the name of a class, function, variable, type, or any other code element written as-is in comments:
-- **In multi-line comments (JSDoc)**: Surround it with backticks `` (e.g., `ClassName`, `functionName()`)
-- **In single-line comments (//)**: Surround it with double quotes "" (e.g., "organizationId", "externalApis")
+- **In multi-line comments (JSDoc)**: surround it with backticks `` (e.g., `ClassName`, `functionName()`)
+- **In single-line comments (`//`)**: surround it with double quotes "" (e.g., "organizationId", "externalApis")
 
 ### Examples
 ```typescript

@@ -1,16 +1,16 @@
 ---
-description: Format any Markdown documentation file to match the project's established style — no blank line between headings and body, bullet points for File/Scope, colon-connected tables, aligned table columns.
+description: Format any Markdown documentation file to match the project's established style: no blank line between headings and body, bullet points for File/Scope, colon-connected tables, aligned table columns.
 ---
 
 # Markdown Formatting Guide
 You are tasked with reformatting one or more Markdown documentation files to match the project's
-established documentation style. Your goal is **not** to change the content — only the formatting.
+established documentation style. Your goal is **not** to change the content, only the formatting.
 
 Read the target file(s) first, then apply every rule below strictly.
 
 ## 1. Title and Metadata Block
 The `#` title is always on line 1. Bold key-value metadata pairs follow **immediately on the next
-line** — no blank line between the title and the metadata block. Each pair is on its own line,
+line**, with no blank line between the title and the metadata block. Each pair is on its own line,
 not in a list.
 
 **Correct:**
@@ -60,7 +60,7 @@ Used for named items in an ordered list (providers, components, utilities, etc.)
 
 Format:
 1. `#### N. \`ItemName\`` heading (backtick-wrap the name; add a qualifier in parentheses if needed)
-2. `- **File**: \`path/to/file.tsx\`` — immediately on the next line, no blank line
+2. `- **File**: \`path/to/file.tsx\`` immediately on the next line, no blank line
 3. `- **Scope**: short description` or `- **Consumed by**: ComponentA, ComponentB`
 4. Blank line
 5. Description prose
@@ -92,9 +92,9 @@ type ResourceViewTarget = { ... }
 ```
 ```
 
-## 4. Tables — Colon Connection
+## 4. Tables: Colon Connection
 When prose introduces a table, the last sentence of the prose **ends with a colon** and the table
-starts **on the very next line** — no blank line in between.
+starts **on the very next line**, with no blank line in between.
 
 **Correct:**
 ```md
@@ -155,10 +155,12 @@ SidebarProvider                             | EdgeInteractiveAddNode, ControlsEd
 This style is only used for terminal summary sections. All other tables use the standard
 `| col | col |` syntax with leading and trailing pipes.
 
-## 7. Separators — Prohibited Patterns
+## 7. Separators: Prohibited Patterns
 Never use the following as visual separators between sections or items:
-- `---` horizontal rules (thematic breaks) — remove them entirely; heading hierarchy provides structure
-- ` - ` (space-dash-space) as an inline separator between two concepts — use a comma, a colon,
+- `---` horizontal rules (thematic breaks): remove them entirely, heading hierarchy provides structure
+- ` - ` (space-dash-space) as an inline separator between two concepts: use a comma, a colon,
+  or restructure the sentence instead
+- ` — ` (em dash with surrounding spaces) as an inline separator: use a comma, a colon,
   or restructure the sentence instead
 
 **Incorrect:**
@@ -222,18 +224,18 @@ Use `**bold**` for:
 
 Do not bold entire sentences or arbitrary emphasis.
 
-## 11. Blank Lines — Full Rules Summary
-| Situation                                            | Blank line?                            |
-|------------------------------------------------------|----------------------------------------|
-| Between `#` title and metadata / description         | No                                     |
-| Between `##` / `###` heading and first body line     | No                                     |
-| Between `####` heading and `- **File**:` bullet      | No                                     |
-| Between `- **Scope**:` bullet and description prose  | Yes (one)                              |
-| Between prose ending with `:` and a table            | No                                     |
-| Between two consecutive `####` sections              | Yes (one)                              |
-| Between `##` sections                                | Yes (one)                              |
-| Between list items (bullet or numbered)              | No                                     |
-| At the end of the file                               | Single trailing newline, no blank line |
+## 11. Blank Lines: Full Rules Summary
+| Situation                                            | Blank line? |
+|------------------------------------------------------|-------------|
+| Between `#` title and metadata / description         | No          |
+| Between `##` / `###` heading and first body line     | No          |
+| Between `####` heading and `- **File**:` bullet      | No          |
+| Between `- **Scope**:` bullet and description prose  | Yes (one)   |
+| Between prose ending with `:` and a table            | No          |
+| Between two consecutive `####` sections              | Yes (one)   |
+| Between `##` sections                                | Yes (one)   |
+| Between list items (bullet or numbered)              | No          |
+| At the end of the file                               | No          |
 
 ## 12. Lists
 Use `-` for unordered lists (not `*` or `+`). Numbered lists use `1.`, `2.`, etc.
@@ -268,7 +270,3 @@ between list items, even when items contain sub-bullets or multi-line content.
 - Do not alter code block contents.
 - Do not rename identifiers, file paths, or component names.
 - Do not add or remove sections.
-
-## 14. Not too much emojis
-Use emojis sparingly and only when they add clear value or context. Avoid excessive or irrelevant
-emoji use that may distract from the content.

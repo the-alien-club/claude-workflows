@@ -38,4 +38,4 @@ You are tasked with creating git commits for the changes made during this sessio
 - You have the full context of what was done in this session
 - Group related changes together
 - Keep commits focused and atomic when possible
-- The user trusts your judgment - they asked you to commit
+- The user trusts your judgment, they asked you to commit
