@@ -1,5 +1,5 @@
 ---
-description: Generate the weekly C-level wrap-up for Adrien (to be handed to Leo), based on recent git commits and codebase context. Produces two versions of the four-column report: one technical for Leo, one non-technical for the CEO and non-tech stakeholders.
+description: "Generate the weekly C-level wrap-up for Adrien (to be handed to Leo), based on recent git commits and codebase context. Produces two versions of the four-column report: one technical for Leo, one non-technical for the CEO and non-tech stakeholders."
 ---
 
 # Weekly Wrap-up Generator
