@@ -5,7 +5,7 @@
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/the-alien-club/claude-workflows)
 
 ## What's Included
-This plugin provides **20 slash commands** and **8 custom agents** to streamline your development workflow:
+This plugin provides **21 slash commands** and **8 custom agents** to streamline your development workflow:
 
 ### Planning & Research
 - `/create_plan`: Interactive implementation planning
@@ -32,6 +32,7 @@ This plugin provides **20 slash commands** and **8 custom agents** to streamline
 - `/create_handoff`: Create handoff documents for session transfer
 - `/resume_handoff`: Resume work from handoff documentation
 - `/weekly_summary`: Generate weekly repository summaries
+- `/adrien_weekly_wrap`: Generate Adrien's weekly C-level wrap-up report (technical + non-technical versions, in French)
 - `/format_comments`: Format comments in the codebase to follow the natural prose style guide
 - `/format_md`: Format Markdown documentation files, enforcing heading spacing, table alignment, separator rules (no em dashes, no inline dashes), and list style
 
