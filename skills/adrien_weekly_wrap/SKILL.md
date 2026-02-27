@@ -18,8 +18,8 @@ Run the following in parallel:
 1. `git log --author="yoratoni" --since="8 days ago" --oneline --all` to get the week's commits
 2. `git show <sha> --stat` for the 3-5 most significant commits to understand scope and changed
    systems, not to count files
-3. Read `ai_docs/workflow_editor/README.md` for the Known Gaps / TODOs table
-4. Read any other `ai_docs/` files that are directly relevant to the commits found
+3. Read `docs/workflow-editor/README.md` for the Known Gaps / TODOs table
+4. Read any `ai_docs/` files that are directly relevant to the commits found
 
 Do not skip steps 3 and 4: the complexity and risk analysis must be grounded in actual
 architectural constraints, not generic statements.
