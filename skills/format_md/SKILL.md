@@ -1,5 +1,5 @@
 ---
-description: Format any Markdown documentation file to match the project's established style: no blank line between headings and body, bullet points for File/Scope, colon-connected tables, aligned table columns.
+"description: Format any Markdown documentation file to match the project's established style: no blank line between headings and body, bullet points for File/Scope, colon-connected tables, aligned table columns."
 ---
 
 # Markdown Formatting Guide
