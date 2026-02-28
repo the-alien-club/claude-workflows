@@ -117,6 +117,7 @@ all rows, including the header and the separator row. Use a monospace mental mod
 longest cell in each column and pad all other cells to that width with trailing spaces.
 
 The separator row uses `-` characters to match the column width exactly.
+No spaces between pipes and dashes: `|---|` not `| --- |`.
 
 **Correct:**
 ```md
@@ -126,6 +127,13 @@ The separator row uses `-` characters to match the column width exactly.
 | `currentJob`                  | The selected job (defaults to latest)                                                             |
 | `currentJobContext`           | Full execution context for the current job                                                        |
 | `currentJobContextHash`       | Hash of `currentJobContext`, used by `useNodeData` to detect when to re-inject results into nodes |
+```
+
+**Incorrect (spaced separator):**
+```md
+| Exposed value                 | Description                       |
+| ----------------------------- | --------------------------------- |
+| `jobs`                        | All jobs for the current workflow |
 ```
 
 **Incorrect (unaligned columns):**
