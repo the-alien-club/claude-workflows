@@ -243,7 +243,7 @@ Do not bold entire sentences or arbitrary emphasis.
 | Between two consecutive `####` sections              | Yes (one)   |
 | Between `##` sections                                | Yes (one)   |
 | Between list items (bullet or numbered)              | No          |
-| At the end of the file                               | No          |
+| At the end of the file                               | Yes         |
 
 ## 12. Lists
 Use `-` for unordered lists (not `*` or `+`). Numbered lists use `1.`, `2.`, etc.
