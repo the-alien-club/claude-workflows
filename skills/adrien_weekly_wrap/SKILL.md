@@ -9,8 +9,8 @@ This report feeds directly into the Master Sheet used for investor and board-lev
 ## Context
 - **Author**: Adrien (yoratoni), reports to Leo, who submits the combined wrap-up
 - **Audience**: two distinct readers, Leo (technical, CTO level) and the CEO + non-tech stakeholders
-- **Language**: French
-- **Anti-pattern**: "J'ai travaillé sur X cette semaine" is explicitly called out as a failed
+- **Language**: English
+- **Anti-pattern**: "I worked on X this week" is explicitly called out as a failed
   report. The goal is risk/impact analysis, not a task log.
 
 ## Step 1: Gather data
@@ -84,10 +84,18 @@ Answer: does this work affect what can be demoed or what a technical investor wi
 - If a demo date or external deadline is known, reference it
 
 ## Format rules
-- Write in French throughout
+- Write in English throughout
 - No `---` horizontal rules between sections
 - Use `-` bullet lists, not `*` or `+`
 - Bold only key terms or labels, not full sentences
 - Do not add a preamble before the first version heading
 - Do not add a closing remark or sign-off after the last section
 - Each column heading is `## <column name>` with no blank line before the first line of content
+
+## 7. Separators: Prohibited Patterns
+Never use the following as visual separators between sections or items:
+- `---` horizontal rules (thematic breaks): remove them entirely, heading hierarchy provides structure
+- ` - ` (space-dash-space) as an inline separator between two concepts: use a comma, a colon,
+  or restructure the sentence instead
+- ` — ` (em dash with surrounding spaces) as an inline separator: use a comma, a colon,
+  or restructure the sentence instead
