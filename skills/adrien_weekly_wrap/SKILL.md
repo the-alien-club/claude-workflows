@@ -3,7 +3,7 @@ description: "Generate the weekly C-level wrap-up for Adrien (to be handed to Le
 ---
 
 # Weekly Wrap-up Generator
-You are tasked with generating Adrien's weekly contribution to Leo's C-level wrap-up report.
+You are tasked with generating Adrien's weekly contribution to Technical C-level wrap-up report.
 This report feeds directly into the Master Sheet used for investor and board-level steering.
 
 ## Context
@@ -38,9 +38,9 @@ communicated through the systems and layers affected, not through numbers.
 
 ## Step 3: Write the two versions
 Output the report in two clearly separated blocks, each containing the same four columns.
-Use `# Version Leo (technique)` and `# Version CEO (non-technique)` as top-level headings.
+Use `# Technical Version (technical)` and `# Non-technical Version` as top-level headings.
 
-### Version Leo (technique)
+### Technical Version (technical)
 Written for a technical reader. Uses engineering vocabulary freely. For each deliverable:
 - Lead with the structural or architectural problem that was solved, not the implementation
 - Explain WHY it matters: what it unblocks, what risk it removes, what it enables for the team
@@ -49,7 +49,7 @@ Written for a technical reader. Uses engineering vocabulary freely. For each del
 - Reference specific known gaps or TODOs when they are relevant to the risk assessment
 - Be honest: if a feature is partially implemented, name the gap and its consequence
 
-### Version CEO (non-technique)
+### Non-technical Version
 Written for a non-technical reader. No code names, no architecture jargon. For each deliverable:
 - Translate the engineering work into product capability or business outcome
   (e.g., "the workflow editor is now more reliable and easier to extend" rather than
@@ -61,24 +61,24 @@ Written for a non-technical reader. No code names, no architecture jargon. For e
 - Keep sentences short and direct
 
 ## The four columns (apply to both versions)
-### Avancement & KPI
+### Progress & KPI
 Describe what was achieved and why it matters. Group related commits into a single deliverable.
 3-5 sentences per deliverable maximum.
 
-### Alerte / Risque stratégique
+### Alert / Strategic Risk
 The most important column. It must explain:
-- WHY the current chantier is taking the time it takes (real constraints, not excuses)
+- WHY the current workstream is taking the time it takes (real constraints, not excuses)
 - What specific gaps remain and what happens if they stay unresolved
 - What could go wrong and under what condition it becomes a blocker
 - In the CEO version, frame every risk in terms of product or fundraising impact
 
-### Impact Levée de Fonds
+### Fundraising Impact
 Answer: does this work affect what can be demoed or what a technical investor will evaluate?
 - If yes: explain how it improves or de-risks the demo or due diligence
 - If no: explain why the work is still necessary (stability, velocity, onboarding)
 - Keep it short: 2-4 sentences
 
-### Focus Semaine Prochaine / Call for Help or Collaboration
+### Next Week Focus / Call for Help or Collaboration
 - State the top 1-2 priorities for next week and what they unblock
 - Call out any dependency on Leo, another team member, or an external decision explicitly
 - If a demo date or external deadline is known, reference it
