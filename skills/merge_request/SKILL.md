@@ -54,40 +54,37 @@ If this is a feature MR, continue to **Step 1A**.
 
 ### Step 1B: Promotion Merge (dev→staging, staging→main, dev→main)
 
-**Do NOT create a GitLab MR. Do NOT squash. Perform a direct git merge.**
+**Create a GitLab MR and merge it once the pipeline passes. Never squash. Never remove source branch.**
+
+Promotions use MRs for two reasons: pipeline sanity check and GitLab history.
 
 ```bash
-# Determine source and target from arguments
+# Determine repo path, source and target from arguments
 # e.g. "workers from dev to staging" → cd workers/, source=dev, target=staging
 
 cd [repo-path]
 
-# Stash any local changes
-git stash
+# Make sure source branch is up to date locally
+git fetch origin [source]
 
-# Checkout and update target branch
-git checkout [target]
-git pull origin [target]
+# Create the promotion MR (no squash, no remove-source-branch)
+glab mr create \
+  --source-branch [source] \
+  --target-branch [target] \
+  --title "chore([repo]): promote [source] → [target]" \
+  --description "Promotion merge. No squash." \
+  --no-editor
 
-# Merge source into target — NO squash, NO remove-source-branch
-git merge origin/[source] --no-squash --no-ff -X theirs \
-  -m "chore: merge [source] into [target]"
-
-# Push
-git push origin [target]
-
-# Return to source branch and restore stash
-git checkout [source]
-git stash pop  # only if stash was needed
+# Enable auto-merge once pipeline passes (no squash)
+glab mr merge --auto-merge --no-squash
 ```
 
-After pushing, report:
-- What was merged (source → target)
-- Commit count and files changed
-- That NO squash was used
-- Remind user to close any open GitLab MR for this promotion if one exists
+After creating the MR:
+- Report the MR URL
+- Confirm auto-merge is set (will merge automatically when pipeline passes)
+- Remind user: **do NOT manually squash** when merging — `dev` and `staging` are permanent long-lived branches and squashing permanently diverges history
 
-**DO NOT** use `--remove-source-branch` for promotions — `dev` and `staging` are permanent branches.
+**DO NOT** use `--remove-source-branch` — `dev` and `staging` are permanent branches.
 
 ---
 
@@ -308,7 +305,7 @@ Following the VERSIONING.md for each affected repo:
 3. **Create MR using glab**:
    ```bash
    glab mr create \
-     --title "[prefix](scope): [Clear title]" \
+     --title "<type>(<scope>): <title>" \
      --description "$(cat /tmp/mr_description.md)" \
      --target-branch dev \
      --assignee @me \
