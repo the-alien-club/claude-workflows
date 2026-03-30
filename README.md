@@ -5,7 +5,7 @@
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/the-alien-club/claude-workflows)
 
 ## What's Included
-This plugin provides **21 slash commands** and **8 custom agents** to streamline your development workflow:
+This plugin provides **22 slash commands** and **8 custom agents** to streamline your development workflow:
 
 ### Planning & Research
 - `/create_plan`: Interactive implementation planning
@@ -19,7 +19,6 @@ This plugin provides **21 slash commands** and **8 custom agents** to streamline
 
 ### Git Workflows
 - `/commit`: Create conventional commits without Claude attribution
-- `/commit_msg`: Create conventional commit messages based on the git diff
 - `/merge_request`: Generate comprehensive GitLab MR descriptions
 - `/describe_pr`: Create PR descriptions
 - `/jira_mr`: Link a merged/open MR to a Jira SDS ticket, find or create the card and update it with MR info
@@ -35,6 +34,8 @@ This plugin provides **21 slash commands** and **8 custom agents** to streamline
 - `/adrien_weekly_wrap`: Generate Adrien's weekly C-level wrap-up report (technical + non-technical versions, in French)
 - `/format_comments`: Format comments in the codebase to follow the natural prose style guide
 - `/format_md`: Format Markdown documentation files, enforcing heading spacing, table alignment, separator rules (no em dashes, no inline dashes), and list style
+- `/update_workflow_editor_docs`: Review and update the workflow editor documentation suite against recent git history
+- `/update_dynamic_field_renderer_docs`: Review and update the dynamic field renderer documentation suite against recent git history
 
 ### DevOps & Utilities
 - `/local_review`: Set up branch review environment
