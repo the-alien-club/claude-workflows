@@ -5,7 +5,7 @@
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/the-alien-club/claude-workflows)
 
 ## What's Included
-This plugin provides **22 slash commands** and **8 custom agents** to streamline your development workflow:
+This plugin provides **23 slash commands** and **8 custom agents** to streamline your development workflow:
 
 ### Planning & Research
 - `/create_plan`: Interactive implementation planning
@@ -26,6 +26,7 @@ This plugin provides **22 slash commands** and **8 custom agents** to streamline
 ### Specialized Workflows
 - `/oneshot`: Research and plan in one command
 - `/oneshot_plan`: Execute full feature workflow
+- `/log_style`: Review and rewrite log statements to follow structured style rules
 
 ### Documentation & Handoffs
 - `/create_handoff`: Create handoff documents for session transfer
