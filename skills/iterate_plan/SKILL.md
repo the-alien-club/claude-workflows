@@ -41,7 +41,6 @@ When this command is invoked:
    - No preliminary questions needed
 
 ## Process Steps
-
 ### Step 1: Read and Understand Current Plan
 1. **Read the existing plan file COMPLETELY**:
    - Use the Read tool WITHOUT limit/offset parameters

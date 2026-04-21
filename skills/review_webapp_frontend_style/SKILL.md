@@ -3,7 +3,6 @@ description: Review recently changed frontend files against the frontend STYLE.m
 ---
 
 # Frontend Style Review
-
 You are tasked with auditing frontend code against the project's official style guide located at
 `packages/frontend/STYLE.md`. Read that file first and keep it as your authoritative reference
 throughout this task.
@@ -13,10 +12,7 @@ modified. Only review those files — do not scan the entire codebase.
 
 Limit your scope to files inside `packages/frontend/`.
 
----
-
 ## What to check
-
 Go through each recently changed `.tsx` and `.ts` file and verify the rules below.
 For each violation, report the **file path**, **line number**, and a **short description** of what
 is wrong and what it should be instead.
@@ -64,10 +60,7 @@ is wrong and what it should be instead.
 - Only add `"use client"` when the component needs interactivity, hooks, or browser APIs.
 - Server Components must have **no** `"use client"` directive.
 
----
-
 ## Output format
-
 Group findings by file. For each file list the violations as a numbered list. If a file has no
 violations, skip it. At the end, give a short summary of how many files were checked and how many
 had violations.
@@ -86,10 +79,7 @@ packages/frontend/hooks/api/useFlows.tsx
 Checked 8 files — 2 had violations.
 ```
 
----
-
 ## Optional: fix mode
-
 If the user's message contains the word **fix** (e.g. `/review_frontend_style fix`), apply the
 fixes directly instead of just reporting them. For each fix:
 - Move inline helpers/sub-components to the correct location.

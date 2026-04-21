@@ -32,7 +32,6 @@ Or provide the task description: `/create_plan Add mTLS authentication to data-c
 Then wait for the user's input.
 
 ## Process Steps
-
 ### Step 1: Context Gathering & Initial Analysis
 1. **Read all mentioned files immediately and FULLY**:
    - Research documents in ai_docs/
@@ -392,7 +391,6 @@ After structure approval:
 ```
 
 ## Common Patterns
-
 ### For Database Changes:
 - Start with schema/migration
 - Add store methods

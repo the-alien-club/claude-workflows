@@ -60,8 +60,6 @@ Re-read each file you edited and confirm:
 - No blank line appears between a heading and the first body line
 - No blank line appears between prose ending in `:` and its table
 
----
-
 ## Formatting Rules
 Apply these rules to every line you write or modify. They match the project's established documentation style exactly.
 

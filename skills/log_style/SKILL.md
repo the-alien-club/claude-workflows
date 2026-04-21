@@ -29,41 +29,31 @@ Use `%s`/`%d` placeholders or the logger's native interpolation — never pre-fo
 - Good: `log.info("Cluster %s synced", cluster.slug)`
 
 ## Rules
-
 1. **Natural sentence, not a field dump.** Write a short English sentence. Do not join key=value pairs with `|` or `,` as if building a structured record.
    - Bad:  `"Accepted message {id} | jobType='{type}' | supported={list}"`
    - Good: `"Accepted message {id} with job type '{type}'"`
-
 2. **Embed context naturally.** Put dynamic values inside the sentence where they make grammatical sense. Use parentheses for secondary context. For structured loggers, prefer moving IDs and counts to the metadata object over embedding them in the string.
    - Bad:  `"Rejected {id} | type='{t}' (not in supported={list}), returned to queue"`
    - Good: `"Rejected message with unsupported type '{t}', returned to queue"` (with `{ id, supported: list }` in metadata)
-
 3. **Sentence case only.** First word capitalized, rest lowercase unless a proper noun or acronym.
    - Bad:  `"PARSE ERROR on message …"`, `"Failed To Connect"`, `"cluster Synced"`
    - Good: `"Parse error on message …"`, `"Failed to connect"`, `"Cluster synced"`
-
 4. **No trailing period.** Log messages are not sentences ending with a full stop.
    - Bad:  `"Connection closed."`, `"Retrying request."`
    - Good: `"Connection closed"`, `"Retrying request"`
-
 5. **No `-` as a separator.** Never use a dash to join two parts of a message. Use a comma or rephrase.
    - Bad:  `"Cache miss for dataset {id} - fetching"`, `"Completed {model} - cost: ${cost}"`
    - Good: `"Cache miss for dataset {id}, fetching"`, `"Completed {model}, cost ${cost}"`
-
 6. **Single quotes around literal identifiers.** Field names, role names, config keys, and other string literals that appear as plain text in the message must be wrapped in single quotes. Interpolated runtime values do not need quoting.
    - Bad:  `"organizationId not in payload"`, `"role user could not be attached"`
    - Good: `"'organizationId' not in payload"`, `"role 'user' could not be attached"`
-
 7. **Choose the right level.**
    - `debug`: internal state useful only when tracing a bug (e.g. per-request detail, low-level polling)
    - `info`: normal lifecycle events an operator might care about (e.g. resource created, job completed)
    - `warn`: something unexpected that the system recovered from (e.g. missing optional config, failed auth attempt)
    - `error`: something that caused an operation to fail (e.g. exception in a service call, unrecoverable state)
-
 8. **No redundant prefixes.** Don't add `[MODULE]` or `[SQS]` tags; the logger name and metadata already carry that context.
-
 9. **No emojis.** Never use emojis in log messages.
-
 10. **Pass errors as objects, not stringified messages.** For structured loggers, pass the raw error under a dedicated key (commonly `err` or `error`) so the logger can serialize the stack trace. For printf loggers, pass the exception as a keyword argument or use the logger's `exc_info` / equivalent mechanism.
     - Bad:  `logger.error(\`Failed to sync: \${error.message}\`)`
     - Good: `logger.error({ err: error, clusterId }, "Failed to sync cluster")`

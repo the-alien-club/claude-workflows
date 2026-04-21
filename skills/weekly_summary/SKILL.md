@@ -150,7 +150,6 @@ Task(subagent_type="Explore", description="Analyze data-cluster", prompt="...")
 ✅ **Business value focused** (not just technical changes)
 
 ## Expected Output
-
 ### Business Summary
 ```markdown
 # Weekly Engineering Update

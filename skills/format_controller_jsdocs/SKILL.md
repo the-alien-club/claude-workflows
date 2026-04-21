@@ -3,11 +3,9 @@ description: Format JSDoc comments in backend controllers to match the establish
 ---
 
 # Backend Controller JSDoc Formatter
-
 You are tasked with formatting JSDoc comments across all controllers in `packages/backend/app/controllers/` to match the established style defined in `organization_users_controller.ts`.
 
 ## Reference Style
-
 Study `packages/backend/app/controllers/organization_users_controller.ts` carefully — it is the canonical example.
 
 ### Public route handler methods
@@ -54,7 +52,6 @@ type ManagedUserResponse = { ... }
 ```
 
 ## How to Find Route Mappings
-
 To determine the correct `HTTP_VERB /path` for each public method, read `packages/backend/start/routes.ts`.
 
 Route declarations follow this pattern:
@@ -76,7 +73,6 @@ For routes registered with `.resource()`, the conventional mapping is:
 - `destroy` → `DELETE /resource/:id`
 
 ## Comment Style Rules
-
 Apply the following rules from the project's comment style guide (see `.claude/commands/format_comments.md` for the full reference):
 
 1. **Natural prose only** — no bullet points or dash-separated lists inside JSDoc
@@ -89,7 +85,6 @@ Apply the following rules from the project's comment style guide (see `.claude/c
 8. **Remove AI slop** — strip "Step X" markers, `---- comment ----` dividers, and redundant phrasing
 
 ## Scope
-
 **Default scope**: Format only controllers that have been modified in the last 16 commits (use `git log --name-only -16` to find them). Ask the user if they want to expand this to all controllers.
 
 **Per-file process**:
@@ -103,7 +98,6 @@ Apply the following rules from the project's comment style guide (see `.claude/c
 5. After editing, verify no JSDoc block is missing a trailing period
 
 ## Output
-
 After processing, report:
 - Which files were changed
 - How many JSDoc blocks were added or modified per file
