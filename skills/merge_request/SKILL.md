@@ -5,7 +5,6 @@ disable-model-invocation: true
 ---
 
 # Create Merge Request
-
 You are tasked with creating a comprehensive GitLab merge request (MR) by analyzing all changes in the feature branch, reviewing commit history, and generating a detailed MR description that follows repository conventions.
 
 ## Initial Response
@@ -17,9 +16,7 @@ I'll help you create a merge request. Let me analyze your feature branch and gen
 Then proceed immediately to analysis.
 
 ## Process Steps
-
 ### Step 0: Detect Promotion vs Feature MR
-
 **Promotion merges** are: `dev → staging`, `dev → main`, `staging → main`.
 **Feature MRs** are: any feature branch → `dev`.
 
@@ -29,10 +26,7 @@ Parse the arguments to determine source and target branch. If the user says some
 
 If this is a feature MR, continue to **Step 1A**.
 
----
-
 ### Step 1A: Feature Branch MR
-
 1. **Verify you're on a feature branch**:
    ```bash
    git branch --show-current
@@ -53,7 +47,6 @@ If this is a feature MR, continue to **Step 1A**.
    - If no MR: Proceed with creation
 
 ### Step 1B: Promotion Merge (dev→staging, staging→main, dev→main)
-
 **Create a GitLab MR and merge it once the pipeline passes. Never squash. Never remove source branch.**
 
 Promotions use MRs for two reasons: pipeline sanity check and GitLab history.
@@ -86,10 +79,7 @@ After creating the MR:
 
 **DO NOT** use `--remove-source-branch` — `dev` and `staging` are permanent branches.
 
----
-
 ### Step 2: Comprehensive Change Analysis
-
 1. **Get all commits in feature branch**:
    ```bash
    git log dev..HEAD --oneline --no-decorate
@@ -118,7 +108,6 @@ After creating the MR:
    - Check for API endpoint additions/modifications
 
 ### Step 3: Gather Documentation Context
-
 1. **Search for related ai_docs**:
    - Look for `ai_docs/[feature-name]/` directory
    - Read if exists:
@@ -137,7 +126,6 @@ After creating the MR:
    - Link if architectural changes were made
 
 ### Step 4: Generate MR Description
-
 Use this template structure:
 
 ````markdown
@@ -233,7 +221,6 @@ Use this template structure:
 ````
 
 ### Step 4B: Version Bump (MANDATORY — CI will fail without it)
-
 **Every MR into `dev` requires a version bump in the changed repository. This is enforced by CI.**
 
 #### 4B.1 — Find and read VERSIONING.md
@@ -287,10 +274,7 @@ Following the VERSIONING.md for each affected repo:
 
 **Repos without CI version checks** (`k8s-charts`, `data-cluster-helm`): no bump required, but their values files may still need updating as described above.
 
----
-
 ### Step 5: Create Merge Request
-
 1. **Ensure branch is pushed**:
    ```bash
    git push -u origin HEAD
@@ -299,18 +283,22 @@ Following the VERSIONING.md for each affected repo:
    - If push succeeds, continue
 
 2. **Write MR description to temp file**:
-   - Write generated description to `/tmp/mr_description.md`
-   - This allows glab to read it properly
+   ```bash
+   MR_TMP=$(mktemp 2>/dev/null || echo "./mr_description_tmp.md")
+   ```
+   - Write generated description to `$MR_TMP`
+   - This allows glab to read it properly and works on both Unix and Windows (Git Bash)
 
 3. **Create MR using glab**:
    ```bash
    glab mr create \
      --title "<type>(<scope>): <title>" \
-     --description "$(cat /tmp/mr_description.md)" \
+     --description "$(cat "$MR_TMP")" \
      --target-branch dev \
      --assignee @me \
      --remove-source-branch \
      --web
+   rm -f "$MR_TMP"
    ```
    - `--title`: Use conventional commit format
    - `--description`: From generated template
@@ -341,7 +329,6 @@ Following the VERSIONING.md for each affected repo:
    ```
 
 ### Step 6: Update Notion Task
-
 1. **Prompt user for Notion update**:
    ```text
    Would you like me to update the Notion task with this MR URL? (yes/no)
@@ -355,7 +342,6 @@ Following the VERSIONING.md for each affected repo:
      - Add comment: "MR created: [URL]"
 
 ## Conventional Commit Prefixes for MR Title
-
 Match the MR title to the primary change type:
 - `feat(component):`: New features
 - `fix(component):`: Bug fixes
@@ -378,7 +364,6 @@ Match the MR title to the primary change type:
 **Multi-component changes**: Use the primary component or `platform` for cross-cutting changes.
 
 ## Important Notes
-
 1. **Always review changes before creating MR**: don't blindly generate descriptions
 2. **Include migration notes** if database changes exist
 3. **Flag breaking changes** prominently in description
@@ -388,7 +373,6 @@ Match the MR title to the primary change type:
 7. **Read ai_docs/ files** if they exist - they contain critical context
 
 ## Error Handling
-
 - **No commits in branch**:
   ```text
   Your feature branch has no commits compared to dev. Please make commits first using the `/commit` command.
@@ -425,7 +409,6 @@ Match the MR title to the primary change type:
   - Provide URL: `https://gitlab.com/[project]/merge_requests/new?merge_request[source_branch]=[branch]`
 
 ## MR Description Quality Guidelines
-
 **Good MR Description**:
 - Clear summary of what changed and why
 - Organized by component (backend/frontend/workers/etc)

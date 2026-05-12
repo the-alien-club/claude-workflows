@@ -66,7 +66,6 @@ Then wait for the user's research query.
    - Each agent knows its job - just tell it what you're looking for
    - Don't write detailed prompts about HOW to search - the agents already know
    - Remind agents they are documenting, not evaluating or improving
-
 4. **Wait for all sub-agents to complete and synthesize findings:**
    - IMPORTANT: Wait for ALL sub-agent tasks to complete before proceeding
    - Compile all sub-agent results (codebase and Notion Knowledge Base findings)
@@ -77,7 +76,6 @@ Then wait for the user's research query.
    - Reference Notion task URLs when relevant
    - Highlight patterns, connections, and architectural decisions
    - Answer the user's specific questions with concrete evidence
-
 5. **Gather metadata for the research document:**
    - Run the `hack/spec_metadata.sh` script to generate all relevant metadata
    - Filename: `ai_docs/[feature-name]/plan/implementation-plan.md`
@@ -88,7 +86,6 @@ Then wait for the user's research query.
      - Examples:
        - With ticket: `2025-01-08-ENG-1478-parent-child-tracking.md`
        - Without ticket: `2025-01-08-authentication-flow.md`
-
 6. **Generate research document:**
    - Use the metadata gathered in step 4
    - Structure the document with YAML frontmatter followed by content:
@@ -148,20 +145,17 @@ Then wait for the user's research query.
      ## Open Questions
      [Any areas that need further investigation]
      ```
-
 7. **Add GitHub permalinks (if applicable):**
    - Check if on main branch or if commit is pushed: `git branch --show-current` and `git status`
    - If on main/master or pushed, generate GitHub permalinks:
      - Get repo info: `gh repo view --json owner,name`
      - Create permalinks: `https://github.com/{owner}/{repo}/blob/{commit}/{file}#L{line}`
    - Replace local file references with permalinks in the document
-
 8. **Sync and present findings:**
    - Update Notion task with progress (link to research/plan file)
    - Present a concise summary of findings to the user
    - Include key file references for easy navigation
    - Ask if they have follow-up questions or need clarification
-
 9. **Handle follow-up questions:**
    - If the user has follow-up questions, append to the same research document
    - Update the frontmatter fields `last_updated` and `last_updated_by` to reflect the update

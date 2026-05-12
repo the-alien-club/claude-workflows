@@ -39,7 +39,6 @@ or using a ticket number to resume from the most recent handoff for that ticket:
 Then wait for the user's input.
 
 ## Process Steps
-
 ### Step 1: Read and Analyze Handoff
 1. **Read handoff document completely**:
    - Use the Read tool WITHOUT limit/offset parameters

@@ -53,7 +53,6 @@ You have access to these key locations and tools:
 - Socket exists: `~/.humanlayer/daemon.sock`
 
 ## Process Steps
-
 ### Step 1: Understand the Problem
 After the user describes the issue:
 

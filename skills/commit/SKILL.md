@@ -33,6 +33,8 @@ You are tasked with creating git commits for the changes made during this sessio
 - Do not include any "Generated with Claude" messages
 - Do not add "Co-Authored-By" lines
 - Write commit messages as if the user wrote them
+- **Conventional commit titles must be lowercase**: the first line (type and description) should always use lowercase letters (e.g., `feat: add new feature` not `feat: Add new feature`)
+- Commit description body should be in past tense (e.g., `Introduced` instead of `Introduce`)
 
 ## Remember:
 - You have the full context of what was done in this session

@@ -15,7 +15,6 @@ I'll help you create merge requests from dev to staging across all repositories.
 Then proceed immediately to repository discovery.
 
 ## Process Steps
-
 ### Step 1: Identify All Repositories
 The DataStreaming monorepo contains these primary repositories:
 
@@ -261,7 +260,6 @@ If user chooses 2:
 8. **Repository Paths**: Filter git log and diff by repository path to isolate changes
 
 ## Error Handling
-
 ### No Changes Found
 ```text
 No repositories have changes from dev to staging. All repositories are already synced.
@@ -304,7 +302,6 @@ Would you like me to retry after you've resolved the issue?
 ```
 
 ## Repository-Specific Considerations
-
 ### web-app/
 - Check for Tuyau type regeneration needs
 - Verify database migrations are included

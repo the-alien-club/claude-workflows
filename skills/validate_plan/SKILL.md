@@ -24,7 +24,6 @@ When invoked:
    ```
 
 ## Validation Process
-
 ### Step 1: Context Discovery
 If starting fresh or need more context:
 
