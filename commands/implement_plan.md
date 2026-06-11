@@ -8,6 +8,10 @@ You are tasked with implementing an approved technical plan from `ai-memories/te
 
 ## Getting Started
 
+### Step 0: Read the guidelines
+
+If there is a style.md file read it, and if there is a playbook read it before writing any code. This will avoid long and painful loop at the end when commiting and the code review comes back negative.
+
 ### Step 1: Branch Setup
 
 Before touching any code, verify and set up the feature branch:
