@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "Alien Intelligence platform development workflows and tools",
-    "version": "1.0.0"
+    "version": "1.1.0"
   },
   "plugins": [
     {
       "name": "alien-intelligence-workflows",
       "source": "./",
       "description": "Alien Intelligence platform development workflows: planning, research, implementation, commits, merge requests, and Notion integration for full-stack AI-powered development",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": {
         "name": "Alien Intelligence"
       },

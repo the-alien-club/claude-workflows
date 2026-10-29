@@ -1,0 +1,21 @@
+{
+  "description": "commit-msg-guard: explain bad commit messages right after git commit and block pushes GitLab's push rule would reject, in repositories on post-merge versioning (release-units.yaml present). SDS-1058.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {"type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/commit-msg-guard.sh", "timeout": 60}
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {"type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/commit-msg-guard.sh", "timeout": 60}
+        ]
+      }
+    ]
+  }
+}

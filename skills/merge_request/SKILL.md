@@ -220,59 +220,45 @@ Use this template structure:
 </details>
 ````
 
-### Step 4B: Version Bump (MANDATORY — CI will fail without it)
-**Every MR into `dev` requires a version bump in the changed repository. This is enforced by CI.**
+### Step 4B: Versioning: check the repository's mode first
 
-#### 4B.1 — Find and read VERSIONING.md
-
-For each repo affected by the diff, look for a `VERSIONING.md` at its root:
+**Repositories with a `release-units.yaml` at their root use post-merge versioning (SDS-1058). In those, NEVER bump a
+version.** The release bot bumps after the merge, from the commit messages. Most repositories are migrated; check
+each repository the diff touches:
 
 ```bash
-# Detect affected repos from diff
-git diff dev...HEAD --name-status | awk '{print $2}' | cut -d/ -f1 | sort -u
+for repo in $(git diff dev...HEAD --name-only | cut -d/ -f1 | sort -u); do
+  [ -f "$repo/release-units.yaml" ] && echo "$repo: post-merge (no bump)" || echo "$repo: manual bump"
+done
 ```
 
-For each detected repo root, check: `cat <repo>/VERSIONING.md`
+#### 4B.1: Post-merge repositories (`release-units.yaml` present)
 
-**If VERSIONING.md exists:** read it carefully — it lists every file that must be updated for a version bump in that repo (code version, Helm chart, values files in other repos, cross-repo files). Follow it exactly.
+1. **Do not touch any version location** (`pyproject.toml` / `package.json` version, `__version__`, `uv.lock`
+   self-entry, `Chart.yaml` `version`/`appVersion`, literal image tags in `values.yaml`). The MR `commit-lint` job
+   rejects a hand edit. If you merged `dev` in and a version file conflicts, take `dev`'s side.
+2. **Commit messages are the release input:** `<type>(<scope>): <summary>`, type one of
+   `build chore ci docs feat fix perf refactor revert style test`. `feat` → minor, anything else → patch.
+3. **Breaking change** (`!` or a `BREAKING CHANGE:` footer) → **major**. Majors are rare (Leo): only for a big
+   change. Otherwise reword the commit without the `!`.
+   - In a repository with several units (data-cluster-helm), name the units it breaks: `feat(operators)!: …`.
+   - A real major needs the MR label `release::major`, then a **new** pipeline. Retrying the failed job does not
+     pick up the label.
+4. **Check before pushing**, with the same rules CI runs:
+   ```bash
+   uvx --from "git+https://gitlab.com/alias3/datastreaming/ci-scripts.git@main#subdirectory=vbump" \
+     vbump --root <repo> lint --target <dev|main>
+   ```
+   Never call a bare `vbump`: an unrelated tool with that name exists in some Python environments. The
+   `commit-msg-guard` hook from this plugin runs the same check after `git commit` and before `git push`.
 
-**If VERSIONING.md does NOT exist:** spawn a sub-agent with the following instruction:
+#### 4B.2: Repositories not migrated yet (no `release-units.yaml`)
 
-> "Write a VERSIONING.md file for the `<repo>` repository in the DataStreaming monorepo. Research:
-> 1. The code version file (pyproject.toml or package.json)
-> 2. Any Helm Chart.yaml files in this repo or referencing this repo (appVersion, version fields)
-> 3. Any values.yaml / values-dev.yaml files that pin the image tag for this service (in this repo, k8s-charts, or data-cluster-helm)
-> 4. Any cross-repo files that must be updated when the version changes
-> Document the image tag suffix convention (X.Y.Z-dev for dev, X.Y.Z-rc for staging, X.Y.Z for prod).
-> Write the file to `<repo>/VERSIONING.md` following the same structure as existing VERSIONING.md files in sibling repos."
+Follow that repository's `VERSIONING.md`. Bump the version once, on the consolidated branch, above `dev` and above
+every open MR. Use `chore(<repo>): bump version to X.Y.Z`. Do not use `cz bump`: its configured message carries a
+CI-skip token.
 
-After the agent writes it, read it and proceed.
-
-#### 4B.2 — Execute the version bump
-
-Following the VERSIONING.md for each affected repo:
-
-1. **Bump the code version:**
-   - Python: `cd <repo> && uv run cz bump --increment PATCH` (`cz bump` auto-commits — do not make a separate commit)
-   - Node: `cd <repo>/packages/<pkg> && npm version patch` (creates a commit)
-   - If `cz bump` fails, manually edit the version field and commit: `chore(<repo>): bump version to X.Y.Z`
-
-2. **Update the Helm chart** (if listed in VERSIONING.md):
-   - Edit `Chart.yaml`: set both `appVersion: "X.Y.Z"` and `version: X.Y.Z` to match the new code version (no suffix)
-
-3. **Update Helm values files** (if listed in VERSIONING.md):
-   - Own chart `values.yaml`: set `image.tag` to `X.Y.Z-dev`
-   - `k8s-charts/helm/datastreaming-app/values-dev.yaml`: set the service's `image.tag` to `X.Y.Z-dev`
-   - Any other cross-repo values files listed (e.g. operator's `chartConfiguration` version field)
-
-4. **Verify all changes:** grep each file to confirm the new version appears correctly
-
-5. **Stage and commit** all Helm/values changes that were not auto-committed by `cz bump`:
-   `chore(<repo>): update helm chart and values to X.Y.Z`
-
-**If changes span multiple repos:** bump each affected repo following its own VERSIONING.md. Changes to `k8s-charts` files require a commit in the `k8s-charts` repo (separate working directory).
-
-**Repos without CI version checks** (`k8s-charts`, `data-cluster-helm`): no bump required, but their values files may still need updating as described above.
+Full guide: ci-scripts `docs/VERSIONING.md`.
 
 ### Step 5: Create Merge Request
 1. **Ensure branch is pushed**:
