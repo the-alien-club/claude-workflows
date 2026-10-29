@@ -28,7 +28,7 @@ Extract and hold:
 - **Commit list** (full one-line log)
 - **Changed files summary** (stat output)
 - **ai-memories context** if `ai-memories/tech/platform/[feature-name]/` exists — read `plan/implementation-plan.md` and `implement/implementation-log.md`
-- **Version bump**: scan commits and `Chart.yaml` / `pyproject.toml` / `package.json` changes for version bumps — note old → new version if found
+- **Release**: in repos with a `release-units.yaml`, feature MRs carry no version change; once the MR is merged, the release bot's next commit on the target branch (`chore(release): <unit> X -> Y`, tag `v…` or `<unit>-v…`) is the version it shipped in. Note it if the MR is merged. In repos without the file, scan the MR's `Chart.yaml` / `pyproject.toml` / `package.json` changes for old → new.
 
 ## Step 2: Fetch All Open SDS Issues
 
@@ -127,10 +127,10 @@ mcp__claude_ai_Atlassian__addCommentToJiraIssue
 
 [git log dev..HEAD --oneline output]
 
-### Version Bump
+### Release
 
-[Only include this section if a version bump was detected]
-`[component]`: `[old version]` → `[new version]`
+[Only include this section if a release was found]
+`[unit]`: `[old version]` → `[new version]`
 ```
 
 ### 5b — Transition status
