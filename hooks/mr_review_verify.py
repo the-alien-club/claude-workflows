@@ -2,7 +2,9 @@
 """Verify from the session transcript that the playbook review really ran.
 
 Called by mr-review.sh once it has decided a review is required. Exit status:
-  0  every governed changed file was covered by a clean playbook-reviewer run
+  0  every governed changed file was covered by a clean playbook-reviewer run, and no
+     reviewer naming a file of this diff reported violations (reviewers of other
+     repos' files in the same session are not this MR's)
   1  not verified; stdout holds the message for the model
 Any other status (crash) is treated as "not verified" by the caller.
 
@@ -264,8 +266,14 @@ def covers(prompt: str, rel_path: str, repo_root: str) -> bool:
 
 def verify(args: argparse.Namespace, files: list[str]) -> list[str]:
     """Return the list of problems; empty means the review is verified."""
+    # Only reviewers started after HEAD and naming at least one file of this diff count.
+    # A session that works on several repos runs reviewers for each of them, and a
+    # finding in another repo's files says nothing about this MR: it blocked a clean
+    # MR here (2026-11-04) because the scan counted every reviewer in the session.
     reviewers = [
-        r for r in scan_transcript(Path(args.transcript)) if r.started >= args.head_time
+        r
+        for r in scan_transcript(Path(args.transcript))
+        if r.started >= args.head_time and any(covers(r.prompt, f, args.repo) for f in files)
     ]
     problems: list[str] = []
 
