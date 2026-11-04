@@ -74,6 +74,8 @@ T_LEGACY=$(tr_make legacy "$(spec "$(rev '["a.py"]' $AFTER legacy-clean)" "$(rev
 T_LEGACY_V=$(tr_make legacyv "$(spec "$(rev '["a.py"]' $AFTER legacy-clean)" "$(rev '["b.py"]' $AFTER legacy-violations)")")
 T_STALE=$(tr_make stale "$(spec "$(rev '["a.py"]' $BEFORE clean)" "$(rev '["b.py"]' $BEFORE clean)")")
 T_PENDING=$(tr_make pending "$(spec "$(rev '["a.py"]' $AFTER clean)" "$(rev '["b.py"]' $AFTER pending)")")
+# A reviewer of another repo's files (here c.py, not in this diff) that reported violations.
+T_OTHER_REPO=$(tr_make otherrepo "$(spec "$(rev '["a.py"]' $AFTER clean)" "$(rev '["b.py"]' $AFTER clean)" "$(rev '["c.py"]' $AFTER violations)")")
 T_PARALLEL=$(tr_make parallel "$(spec "$(rev '["a.py"]' $AFTER clean)" "$(rev '["b.py"]' $AFTER clean)" "$(rev '["a.py"]' $AFTER violations)")")
 printf 'this is not json\n' > "$WORK/garbage.jsonl"
 
@@ -90,6 +92,7 @@ run_case "sync reviewer violations -> deny"         DENY "reported violations" "
 run_case "commit after a clean review -> deny"      DENY "a.py"      "$REPO" "$T_STALE"       "$MR"
 run_case "review with no result yet -> deny"        DENY "no result yet" "$REPO" "$T_PENDING" "$MR"
 run_case "parallel: one of two covering a.py violates -> deny" DENY "reported violations" "$REPO" "$T_PARALLEL" "$MR"
+run_case "violations on another repo's files only -> allow" ALLOW "" "$REPO" "$T_OTHER_REPO" "$MR"
 run_case "unreadable transcript -> deny"            DENY "cannot read" "$REPO" "$WORK/nope.jsonl" "$MR"
 run_case "unparseable transcript -> deny"           DENY "could not be verified" "$REPO" "$WORK/garbage.jsonl" "$MR"
 run_case "no transcript_path -> deny"               DENY "transcript_path" "$REPO" "" "$MR"

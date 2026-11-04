@@ -4,7 +4,9 @@
 # Intercepts `glab mr create` and allows it only when the session transcript
 # proves that the review_playbook skill ran for this exact HEAD: every changed
 # file named in the prompt of a playbook-reviewer agent started after HEAD was
-# committed, and every such reviewer reported "No violations found.".
+# committed, and every such reviewer reported "No violations found.". Reviewers
+# whose prompt names none of this diff's files (another repo reviewed in the same
+# session) are not counted.
 # Verification lives in mr_review_verify.py; the hook keeps no state file.
 # Passes through silently if the repo has no playbook.
 #
