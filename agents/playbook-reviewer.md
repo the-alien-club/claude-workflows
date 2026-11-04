@@ -1,6 +1,6 @@
 ---
 name: playbook-reviewer
-description: Strict code reviewer that independently reads playbook rules and a diff, then reports every violation with file and line. Call this agent with the target (commit SHA, branch name, or MR number) and the path to the playbook directory. It does all the reading itself.
+description: Strict code reviewer that independently reads playbook rules and a diff, then reports every violation with file and line. Spawn one per changed file, directly from the session that will open the MR, with the file path, the target and the playbook directory in the prompt (the review_playbook skill does this; the mr-review.sh hook verifies it). It does all the reading itself.
 tools: Read, Bash, Grep, Glob
 model: sonnet
 color: red
