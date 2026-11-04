@@ -8,7 +8,9 @@
 # whose prompt names none of this diff's files (another repo reviewed in the same
 # session) are not counted.
 # Verification lives in mr_review_verify.py; the hook keeps no state file.
-# Passes through silently if the repo has no playbook.
+# Only files some playbook rule's `## Scope` covers need a review (playbook_scope.py;
+# a rule without a Scope section covers every file). Passes through silently if the
+# repo has no playbook.
 #
 # This is the only playbook gate. Commits are deliberately not gated: one
 # review of the whole branch at MR time costs far less than one per commit.
@@ -126,15 +128,32 @@ fi
 HEAD_SHA=$(cd "$GIT_ROOT" && git rev-parse HEAD)
 HEAD_TIME=$(cd "$GIT_ROOT" && git log -1 --format=%ct HEAD)
 
-# Only files governed by some playbook need a review; the rest are not covered
-# by any rule. A changed file is reviewed against its NEAREST playbook.
-GOVERNED=""
+# Only files governed by some playbook need a review, and of those only the ones
+# some rule of that playbook covers (its `## Scope` globs; a rule without a Scope
+# section covers everything). A changed file is reviewed against its NEAREST
+# playbook. The matching lives in playbook_scope.py, shared with review_playbook.
+PAIRS=""
 while IFS= read -r f; do
     [[ -z "$f" ]] && continue
-    [[ -n "$(nearest_playbook "$f")" ]] && GOVERNED+="$f"$'\n'
+    pb=$(nearest_playbook "$f")
+    [[ -n "$pb" ]] && PAIRS+="$pb"$'\t'"$f"$'\n'
 done <<< "$CHANGED_FILES"
 
 # No changed file is governed by any playbook: nothing to review, allow the MR.
+[[ -z "$PAIRS" ]] && exit 0
+
+SCOPER="$(dirname "${BASH_SOURCE[0]}")/playbook_scope.py"
+if ! SELECTION=$(printf '%s' "$PAIRS" | python3 "$SCOPER" 2>&1); then
+    deny "Playbook review cannot be verified: playbook scope resolution failed: $SELECTION"
+fi
+GOVERNED=$(jq -r '.required[]' <<<"$SELECTION") \
+    || deny "Playbook review cannot be verified: unreadable scope resolution output: $SELECTION"
+SKIPPED=$(jq -r '.skipped' <<<"$SELECTION")
+SCOPE_WARNINGS=$(jq -r '.warnings[] | "WARNING: " + .' <<<"$SELECTION")
+SCOPE_NOTE="$SKIPPED changed file(s) skipped: no playbook rule's Scope covers them."
+[[ -n "$SCOPE_WARNINGS" ]] && SCOPE_NOTE+=$'\n'"$SCOPE_WARNINGS"
+
+# Every governed file is outside every rule's Scope: nothing to review.
 [[ -z "$GOVERNED" ]] && exit 0
 
 TRANSCRIPT=$(echo "$INPUT" | jq -r '.transcript_path // ""')
@@ -145,4 +164,5 @@ if VERDICT=$(printf '%s' "$GOVERNED" | python3 "$VERIFIER" \
         --transcript "$TRANSCRIPT" --repo "$GIT_ROOT" --head "$HEAD_SHA" --head-time "$HEAD_TIME" 2>&1); then
     exit 0
 fi
-deny "${VERDICT:-Playbook review could not be verified (verifier produced no output).}"
+deny "${VERDICT:-Playbook review could not be verified (verifier produced no output).}
+$SCOPE_NOTE"

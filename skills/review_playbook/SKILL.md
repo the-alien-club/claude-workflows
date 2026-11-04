@@ -13,7 +13,7 @@ The `mr-review.sh` hook gates `glab mr create` on this review. It reads the sess
 
 ## Gate contract
 
-- **One reviewer per changed governed file.** A file is governed by the nearest `playbook/` above it. Deleted files are skipped.
+- **One reviewer per changed file that a playbook rule covers.** A file is governed by the nearest `playbook/` above it, and needs a reviewer only if at least one rule in that playbook covers it (see "Rule scope" in Step 2). Deleted files are skipped. Reviewing an uncovered file is harmless but wasted: the gate does not require it.
 - **Spawn them directly from the session that will run `glab mr create`**, with the Agent tool and `subagent_type: "playbook-reviewer"` (the plugin-prefixed name also counts). Reviewers spawned inside a subagent are not in this session's transcript and do not count.
 - **Each prompt names its file path**, repo-relative or absolute. A reviewer whose prompt does not name a file covers nothing.
 - **A clean result is exactly `No violations found.`** Any other output, including a summary, counts as violations.
@@ -44,12 +44,26 @@ git diff origin/dev...HEAD --name-only --diff-filter=d   # commit: git show [sha
 
 Assign each file to the nearest playbook above it (the root `playbook/` governs everything not claimed by a deeper `packages/*/playbook`). Files with no playbook above them are skipped.
 
+**Rule scope.** Of the governed files, review only those some rule covers. Do not decide this by hand: pipe `<absolute playbook dir><TAB><repo-relative file>` lines (one per governed file) into the same script the gate uses, from the repo root:
+
+```bash
+printf '%s\t%s\n' "$PWD/playbook" src/x.rs "$PWD/playbook" .gitlab-ci.yml \
+  | python3 "${CLAUDE_PLUGIN_ROOT}/hooks/playbook_scope.py"
+# {"required": ["src/x.rs"], "skipped": 1, "warnings": []}
+```
+
+Spawn reviewers for `required` only, and report `skipped` and any `warnings` in the footer. The rules, as implemented in `hooks/playbook_scope.py`:
+- A rule's `## Scope` section lists backticked globs, relative to the repo root. `**` matches any number of path segments, `*` matches within one segment. Prose after the globs is ignored.
+- A rule file with no `## Scope` section covers every file. So a playbook where any rule lacks a Scope requires a review of every governed file.
+- A `## Scope` section with no parseable glob fails closed: it covers every file, and the script warns.
+- `README.md` and files whose name starts with `_` are not rules.
+
 If no playbook is found, stop and report:
 > No playbook found. Run `/add_playbook_rule` to create rules first.
 
 ## Step 3: Spawn One Reviewer per File
 
-In a single message, call `Agent` once per governed file with `subagent_type: "playbook-reviewer"`. Each prompt contains only:
+In a single message, call `Agent` once per `required` file from Step 2 with `subagent_type: "playbook-reviewer"`. Each prompt contains only:
 - the file path (repo-relative)
 - the diff command for that file only
 - the absolute path to its playbook directory
@@ -80,4 +94,5 @@ Append this footer:
 Playbook : [path(s)]
 Target   : [resolved target]
 Reviewed : [n files, n reviewers, n clean]
+Skipped  : [n files outside every rule's Scope] [scope warnings, if any]
 ```
