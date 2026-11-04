@@ -18,7 +18,7 @@ T0="2026-11-04T10:00:00Z"        # HEAD commit time
 BEFORE="2026-11-04T09:55:00.000Z"
 AFTER="2026-11-04T10:05:00.000Z"
 mkdir -p "$WORK"
-trap 'rm -rf "$WORK"' EXIT
+[[ -n "${KEEP:-}" ]] || trap 'rm -rf "$WORK"' EXIT
 
 PASS=0; FAIL=0
 
@@ -105,6 +105,79 @@ run_case "new commit after clean review -> deny"    DENY "a.py"      "$REPO" "$T
 # The marker file must be gone entirely.
 if grep -qE 'claude-mr-reviewed|/tmp|md5sum' "$HERE/../mr-review.sh" "$HERE/../mr_review_verify.py"; then
     FAIL=$((FAIL+1)); echo "FAIL hook still references /tmp or a marker"; else PASS=$((PASS+1)); echo "ok   no marker / no /tmp in hook"; fi
+
+# --- Rule scope: only files some rule's `## Scope` covers need a review ---------
+# make_scope_repo DIR "<rule-file>=<body>" ... -- <changed files...>
+# Rule bodies use \n for newlines. The base commit holds the playbook, the feature
+# commit adds the changed files (playbook/ rule edits included).
+make_scope_repo() {
+    local dir="$1"; shift
+    git init -q -b main "$dir"; mkdir "$dir/playbook"
+    while [[ "$1" != "--" ]]; do
+        printf '%b' "${1#*=}" > "$dir/playbook/${1%%=*}"; shift
+    done; shift
+    echo base > "$dir/base.txt"; git_in "$dir" add -A; git_in "$dir" commit -qm base
+    git_in "$dir" checkout -qb feature
+    local f; for f in "$@"; do mkdir -p "$dir/$(dirname "$f")"; echo x > "$dir/$f"; done
+    git_in "$dir" add -A; GIT_COMMITTER_DATE="$T0" git_in "$dir" commit -qm "feat: change"
+}
+RUST_RULE='## Scope\n`**/*.rs`, `Cargo.toml`\n\n## Rule\nno unwrap\n'
+TS_RULE='## Scope\n`frontend/**/*.ts` containing MCP tools (`#[tool(`)\n\n## Rule\nno any\n'
+ITG_FILES=(src/x.rs playbook/README.md .gitlab-ci.yml)
+
+ITG="$WORK/itg"
+make_scope_repo "$ITG" "rust-a.md=$RUST_RULE" "ts-b.md=$TS_RULE" "README.md=# index\n" "_template.md=# t\n" -- "${ITG_FILES[@]}"
+T_RS=$(tr_make rs "$(spec "$(rev '["src/x.rs"]' $AFTER clean)")")
+T_ALLFILES=$(tr_make allfiles "$(spec "$(rev '["src/x.rs"]' $AFTER clean)" "$(rev '[".gitlab-ci.yml"]' $AFTER clean)" "$(rev '["playbook/README.md"]' $AFTER clean)")")
+run_case "scope: no review -> deny, names the covered file"      DENY "src/x.rs" "$ITG" "$T_NONE" "$MR"
+run_case "scope: deny says how many files were skipped"          DENY "2 changed file(s) skipped" "$ITG" "$T_NONE" "$MR"
+run_case "scope: only covered file reviewed -> allow"            ALLOW "" "$ITG" "$T_RS" "$MR"
+run_case "scope: reviewing everything -> allow"                  ALLOW "" "$ITG" "$T_ALLFILES" "$MR"
+
+# Nothing changed is covered: no review needed at all.
+SKIPONLY="$WORK/skiponly"
+make_scope_repo "$SKIPONLY" "rust-a.md=$RUST_RULE" -- .gitlab-ci.yml docs/guide.md playbook/README.md
+run_case "scope: only uncovered files changed -> allow, no reviewers" ALLOW "" "$SKIPONLY" "$T_NONE" "$MR"
+
+# One rule without Scope covers every file (old playbooks behave as before).
+NOSCOPE="$WORK/noscope"
+make_scope_repo "$NOSCOPE" "rust-a.md=$RUST_RULE" "plain.md=# plain rule\nno bare except\n" -- "${ITG_FILES[@]}"
+run_case "scope: a rule without Scope -> everything required"    DENY ".gitlab-ci.yml" "$NOSCOPE" "$T_NONE" "$MR"
+run_case "scope: a rule without Scope -> nothing skipped"        DENY "0 changed file(s) skipped" "$NOSCOPE" "$T_NONE" "$MR"
+# README.md and _-prefixed files are not rules: their lack of Scope must not widen it.
+run_case "scope: README/_template without Scope are not rules"   ALLOW "" "$ITG" "$T_RS" "$MR"
+
+# A Scope section with no parseable glob fails closed and warns.
+EMPTYSCOPE="$WORK/emptyscope"
+make_scope_repo "$EMPTYSCOPE" "rust-a.md=$RUST_RULE" "vague.md=## Scope\nall the Rust sources\n\n## Rule\nx\n" -- "${ITG_FILES[@]}"
+run_case "scope: no parseable glob -> fail closed (all required)" DENY ".gitlab-ci.yml" "$EMPTYSCOPE" "$T_NONE" "$MR"
+run_case "scope: no parseable glob -> warning in output"          DENY "WARNING: " "$EMPTYSCOPE" "$T_NONE" "$MR"
+run_case "scope: warning names the rule file"                     DENY "vague.md" "$EMPTYSCOPE" "$T_NONE" "$MR"
+
+# Glob semantics. `*` stays inside one segment; `**` spans segments (and may span none).
+GLOBS="$WORK/globs"
+make_scope_repo "$GLOBS" \
+    "a.md=## Scope\n\`src/*.rs\`\n" \
+    "b.md=## Scope\n\`lib/**/*.py\`, \`web/**\`, \`conf/\`, \`*.toml\`\n" \
+    -- src/x.rs src/deep/y.rs lib/a.py lib/b/c/d.py libx/a.py lib/a.pyc web/p/q.txt web.txt conf/z.yml top.toml sub/top.toml
+GLOB_OUT=$(hook_in "$GLOBS" "$T_NONE" "$MR" | "$HOOK" 2>&1)
+glob_expect() {  # name required|skipped path
+    local listed=0; grep -qF -- "- $3  (" <<<"$GLOB_OUT" && listed=1
+    if [[ ( "$2" == required && $listed == 1 ) || ( "$2" == skipped && $listed == 0 ) ]]; then
+        PASS=$((PASS+1)); echo "ok   glob: $3 is $2"
+    else FAIL=$((FAIL+1)); echo "FAIL glob: $3 should be $2"; fi
+}
+glob_expect x required src/x.rs          # src/*.rs: one segment
+glob_expect x skipped  src/deep/y.rs     # * does not cross /
+glob_expect x required lib/a.py          # lib/**/*.py: zero segments in between
+glob_expect x required lib/b/c/d.py      # ** spans several segments
+glob_expect x skipped  libx/a.py         # ** must not match a sibling prefix
+glob_expect x skipped  lib/a.pyc         # extension must match fully
+glob_expect x required web/p/q.txt       # web/** : anything below web/
+glob_expect x skipped  web.txt           # web/** needs the slash
+glob_expect x required conf/z.yml        # trailing slash = everything below
+glob_expect x required top.toml          # *.toml at the root
+glob_expect x skipped  sub/top.toml      # root-relative: * does not reach into sub/
 
 echo; echo "passed=$PASS failed=$FAIL"
 (( FAIL == 0 ))
