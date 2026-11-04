@@ -223,8 +223,9 @@ Use this template structure:
 ### Step 4B: Versioning: check the repository's mode first
 
 **Repositories with a `release-units.yaml` at their root use post-merge versioning (SDS-1058). In those, NEVER bump a
-version.** The release bot bumps after the merge, from the commit messages. Most repositories are migrated; check
-each repository the diff touches:
+version.** The release bot bumps after the merge, from the commit messages. Every application repository is migrated
+(2026-10-29); the exceptions are k8s-charts (versions set by gitops jobs, by design) and the main-only tooling repos
+claude-sre and lds-langfuse-sync. Check each repository the diff touches:
 
 ```bash
 for repo in $(git diff dev...HEAD --name-only | cut -d/ -f1 | sort -u); do
