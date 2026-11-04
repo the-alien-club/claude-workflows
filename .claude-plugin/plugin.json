@@ -1,7 +1,7 @@
 {
     "name": "alien-intelligence-workflows",
     "description": "Alien Intelligence platform development workflows: planning, research, implementation, commits, merge requests, and Notion integration for full-stack AI-powered development",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "author": {
         "name": "Alien Intelligence"
     },

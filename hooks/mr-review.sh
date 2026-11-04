@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 # Pre-MR playbook review hook for Claude Code.
 #
-# Intercepts glab mr create commands and denies the first attempt, instructing
-# Claude to run a playbook review on the branch before the MR is opened.
-# Falls back silently if no playbook exists for the repo.
+# Intercepts `glab mr create` and allows it only when the session transcript
+# proves that the review_playbook skill ran for this exact HEAD: every changed
+# file named in the prompt of a playbook-reviewer agent started after HEAD was
+# committed, and every such reviewer reported "No violations found.".
+# Verification lives in mr_review_verify.py; the hook keeps no state file.
+# Passes through silently if the repo has no playbook.
 #
-# A time-limited marker file prevents infinite deny loops: the second attempt
-# within 3 minutes is allowed through.
+# This is the only playbook gate. Commits are deliberately not gated: one
+# review of the whole branch at MR time costs far less than one per commit.
 
 set -euo pipefail
 
@@ -24,8 +27,10 @@ fi
 # normal feature MRs. Re-reviewing on promotion surfaces pre-existing
 # violations that are out of scope for the promotion. See feedback memory:
 # feedback_no_playbook_on_promotion_mrs.md
-SRC_BRANCH=$(echo "$COMMAND" | grep -oE -- '--source-branch[= ]+[^ ]+' | head -1 | sed -E 's/--source-branch[= ]+//')
-TGT_BRANCH=$(echo "$COMMAND" | grep -oE -- '--target-branch[= ]+[^ ]+' | head -1 | sed -E 's/--target-branch[= ]+//')
+# `|| true`: under pipefail an absent flag makes grep exit 1, which would kill
+# the hook, and a hook that errors does not block, so the gate never fired.
+SRC_BRANCH=$(echo "$COMMAND" | grep -oE -- '--source-branch[= ]+[^ ]+' | head -1 | sed -E 's/--source-branch[= ]+//' || true)
+TGT_BRANCH=$(echo "$COMMAND" | grep -oE -- '--target-branch[= ]+[^ ]+' | head -1 | sed -E 's/--target-branch[= ]+//' || true)
 if [[ "$SRC_BRANCH" == "dev" && "$TGT_BRANCH" == "staging" ]] \
    || [[ "$SRC_BRANCH" == "staging" && "$TGT_BRANCH" == "main" ]]; then
     exit 0
@@ -47,58 +52,95 @@ fi
 GIT_ROOT=$(cd "$CWD" 2>/dev/null && git rev-parse --show-toplevel 2>/dev/null) || exit 0
 [[ -z "$GIT_ROOT" ]] && exit 0
 
-# No playbook: nothing to enforce, allow the MR
-if [[ ! -d "$GIT_ROOT/playbook" ]]; then
+# Discover every playbook directory at or below the git root: the repo root
+# plus any packages/*/playbook (monorepo layout, e.g. web-app). A changed file
+# is reviewed against the NEAREST playbook above it in the tree.
+declare -a PLAYBOOK_DIRS=()
+[[ -d "$GIT_ROOT/playbook" ]] && PLAYBOOK_DIRS+=("$GIT_ROOT/playbook")
+for pb in "$GIT_ROOT"/packages/*/playbook; do
+    [[ -d "$pb" ]] && PLAYBOOK_DIRS+=("$pb")
+done
+
+# No playbook anywhere: nothing to enforce, allow the MR
+if [[ ${#PLAYBOOK_DIRS[@]} -eq 0 ]]; then
     exit 0
 fi
 
-PLAYBOOK_DIR="$GIT_ROOT/playbook"
+# nearest_playbook <repo-relative-path> → absolute playbook dir governing it,
+# or empty. The governing playbook is the one whose parent directory is the
+# deepest ancestor of the file. The root playbook (if present) governs every
+# file not claimed by a deeper package playbook.
+nearest_playbook() {
+    local rel="$1" best="" best_depth=-1
+    local pb parent depth
+    for pb in "${PLAYBOOK_DIRS[@]}"; do
+        parent="${pb%/playbook}"        # absolute dir the playbook governs
+        parent="${parent#"$GIT_ROOT"}"  # make repo-relative
+        parent="${parent#/}"            # strip leading slash → "" at root
+        if [[ -z "$parent" ]]; then
+            depth=0                     # root playbook governs everything
+        elif [[ "$rel" == "$parent/"* ]]; then
+            depth=$(( $(grep -o "/" <<<"$parent" | wc -l) + 1 ))
+        else
+            continue
+        fi
+        if (( depth > best_depth )); then
+            best_depth=$depth
+            best="$pb"
+        fi
+    done
+    printf '%s' "$best"
+}
 
-# Marker prevents infinite deny loop
-REPO_HASH=$(echo "$GIT_ROOT" | md5sum | cut -d' ' -f1)
-MARKER="/tmp/.claude-mr-reviewed-${REPO_HASH}"
-
-if [[ -f "$MARKER" ]]; then
-    MARKER_AGE=$(( $(date +%s) - $(stat -c %Y "$MARKER" 2>/dev/null || echo 0) ))
-    if [[ $MARKER_AGE -lt 180 ]]; then
-        rm -f "$MARKER"
-        exit 0
-    fi
-    rm -f "$MARKER"
-fi
-
-CURRENT_BRANCH=$(cd "$GIT_ROOT" && git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
-DIFF_STAT=$(cd "$GIT_ROOT" && git diff dev...HEAD --stat 2>/dev/null || git diff main...HEAD --stat 2>/dev/null || echo "(could not compute diff stat)")
-
-touch "$MARKER"
-
-read -r -d '' CONTEXT <<CTXEOF || true
-PLAYBOOK REVIEW REQUIRED BEFORE OPENING MR
-
-This repo has a playbook. You MUST review the branch diff against it before
-creating the merge request. Use the playbook-reviewer agent — do not review manually.
-
-Steps:
-1. Spawn the playbook-reviewer agent with:
-   - Target: git diff dev...HEAD -U10 (run from $GIT_ROOT; fall back to main if dev doesn't exist)
-   - Playbook: $PLAYBOOK_DIR
-   - Working directory: $GIT_ROOT
-2. If the agent reports violations, fix them, commit the fixes, then run glab mr create again.
-3. If the agent reports "No violations found.", run glab mr create again immediately.
-
-Current branch: $CURRENT_BRANCH
-Diff stat:
-${DIFF_STAT}
-CTXEOF
-
-jq -n \
-    --arg reason "Playbook review required. Spawn the playbook-reviewer agent before opening the MR." \
-    --arg context "$CONTEXT" \
-    '{
+deny() {
+    jq -n --arg reason "$1" '{
         hookSpecificOutput: {
             hookEventName: "PreToolUse",
             permissionDecision: "deny",
             permissionDecisionReason: $reason,
-            additionalContext: $context
+            additionalContext: $reason
         }
     }'
+    exit 0
+}
+
+# Diff against the remote-tracking ref of the MR target (--target-branch, else
+# dev, else main). A local branch is only a fallback: a stale local dev makes
+# the diff include files from other MRs merged since, and every one of them
+# costs a reviewer agent.
+BASE=""
+for candidate in ${TGT_BRANCH:+"origin/$TGT_BRANCH" "$TGT_BRANCH"} origin/dev dev origin/main main; do
+    if (cd "$GIT_ROOT" && git rev-parse --verify --quiet "$candidate" >/dev/null 2>&1); then
+        BASE="$candidate"
+        break
+    fi
+done
+[[ -z "$BASE" ]] && deny "Playbook review cannot be verified: no base ref found (tried origin/dev, dev, origin/main, main). Pass --target-branch with a branch that exists locally or on origin."
+
+# Deleted files have nothing left to review.
+if ! CHANGED_FILES=$(cd "$GIT_ROOT" && git -c core.quotepath=off diff "$BASE"...HEAD --name-only --diff-filter=d 2>&1); then
+    deny "Playbook review cannot be verified: git diff $BASE...HEAD failed: $CHANGED_FILES"
+fi
+HEAD_SHA=$(cd "$GIT_ROOT" && git rev-parse HEAD)
+HEAD_TIME=$(cd "$GIT_ROOT" && git log -1 --format=%ct HEAD)
+
+# Only files governed by some playbook need a review; the rest are not covered
+# by any rule. A changed file is reviewed against its NEAREST playbook.
+GOVERNED=""
+while IFS= read -r f; do
+    [[ -z "$f" ]] && continue
+    [[ -n "$(nearest_playbook "$f")" ]] && GOVERNED+="$f"$'\n'
+done <<< "$CHANGED_FILES"
+
+# No changed file is governed by any playbook: nothing to review, allow the MR.
+[[ -z "$GOVERNED" ]] && exit 0
+
+TRANSCRIPT=$(echo "$INPUT" | jq -r '.transcript_path // ""')
+[[ -z "$TRANSCRIPT" ]] && deny "Playbook review cannot be verified: the hook input carries no transcript_path. Never allowed by default."
+
+VERIFIER="$(dirname "${BASH_SOURCE[0]}")/mr_review_verify.py"
+if VERDICT=$(printf '%s' "$GOVERNED" | python3 "$VERIFIER" \
+        --transcript "$TRANSCRIPT" --repo "$GIT_ROOT" --head "$HEAD_SHA" --head-time "$HEAD_TIME" 2>&1); then
+    exit 0
+fi
+deny "${VERDICT:-Playbook review could not be verified (verifier produced no output).}"
