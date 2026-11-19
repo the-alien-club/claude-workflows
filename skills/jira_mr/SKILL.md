@@ -127,13 +127,16 @@ mcp__claude_ai_Atlassian__getTransitionsForJiraIssue
   issueKey: "[SDS-XX]"
 ```
 
-**Known SDS transition IDs** (verify with getTransitions if unsure):
+**Known SDS transition IDs** (checked 2026-11-19, verify with getTransitions if unsure):
 - `"11"` → To Do
 - `"21"` → In Progress
-- `"2"`  → VALIDATION
+- `"32"` → IN DESIGN
+- `"33"` → IN REVIEW
+- `"3"`  → ALPHA
+- `"2"`  → BETA (was VALIDATION, never use it for a merged MR)
 - `"31"` → Done
 
-If MR(s) are merged: transition to **VALIDATION** (`"2"`), Done is set by the product team after manual review.
+If MR(s) are merged: transition to **IN REVIEW** (`"33"`), Done is set by the product team after manual review.
 If MR is open/in review: transition to **In Progress** (`"21"`).
 If the current status is already correct: skip this step.
 
